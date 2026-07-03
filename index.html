@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="国内优秀虚拟展厅案例调研 — 系统梳理15个国内顶尖虚拟展厅案例，涵盖VR全景、网页叙事、3D展示等多种形式，提供深度分析与实践启示。">
+    <meta name="keywords" content="虚拟展厅,VR展厅,数字展览,博物馆数字化,数字敦煌,故宫,国博,线上展览">
+    <title>国内优秀虚拟展厅案例调研 | Virtual Exhibition Research</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230071e3'/><text x='16' y='22' text-anchor='middle' fill='white' font-size='18' font-weight='bold'>V</text></svg>">
+</head>
+<body>
+
+    <!-- ==================== 加载动画 ==================== -->
+    <div class="loader" id="loader" aria-hidden="true">
+        <div class="loader__spinner"></div>
+        <p class="loader__text">正在加载案例数据…</p>
+    </div>
+
+    <!-- ==================== 顶部导航栏 ==================== -->
+    <header class="header" id="header">
+        <div class="header__title-group">
+            <div class="header__logo" aria-hidden="true">V</div>
+            <div>
+                <div class="header__title">虚拟展厅案例调研</div>
+                <div class="header__subtitle">Virtual Exhibition Research</div>
+            </div>
+        </div>
+
+        <div class="header__actions">
+            <!-- 搜索框 -->
+            <div class="header__search">
+                <span class="header__search-icon" aria-hidden="true">🔍</span>
+                <input
+                    type="text"
+                    class="header__search-input"
+                    id="searchInput"
+                    placeholder="搜索案例名称、单位…"
+                    aria-label="搜索案例"
+                    autocomplete="off"
+                >
+            </div>
+
+            <!-- 深色模式切换 -->
+            <button class="header__btn" id="themeToggle" title="切换深色/浅色模式" aria-label="切换深色模式">
+                🌙
+            </button>
+
+            <!-- 移动端菜单按钮 -->
+            <button class="mobile-nav-toggle" id="mobileNavToggle" title="打开导航菜单" aria-label="打开导航菜单">
+                ☰
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== 主体布局 ==================== -->
+    <div class="main">
+
+        <!-- ========== 左侧导航栏 ========== -->
+        <aside class="sidebar" id="sidebar" aria-label="案例导航">
+            <!-- 统计信息 -->
+            <div class="sidebar__stats" id="sidebarStats">
+                <!-- JS 动态填充 -->
+            </div>
+
+            <!-- 案例导航列表 -->
+            <div class="sidebar__nav-title">案例导航</div>
+            <nav class="sidebar__nav" id="sidebarNav">
+                <!-- JS 动态填充 -->
+            </nav>
+        </aside>
+
+        <!-- 侧栏遮罩（移动端） -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- ========== 右侧内容区 ========== -->
+        <main class="content" id="content">
+
+            <!-- ===== Hero 标题区 ===== -->
+            <section class="hero">
+                <span class="hero__label">调研成果展示</span>
+                <h1 class="hero__title">国内优秀虚拟展厅案例调研</h1>
+                <p class="hero__subtitle">Virtual Exhibition Hall Research</p>
+                <p class="hero__desc">
+                    系统梳理国内15个顶尖虚拟展厅案例，涵盖博物馆、档案馆、纪念馆等多元机构类型，
+                    从展示形式、技术实现、内容组织、交互设计等维度进行深度分析与横向比较，
+                    提炼优秀实践启示，为数字展览建设提供参考。
+                </p>
+            </section>
+
+            <!-- ===== 统计卡片行 ===== -->
+            <section class="stats-row" aria-label="数据概览">
+                <article class="stat-card">
+                    <div class="stat-card__icon">📊</div>
+                    <div class="stat-card__number" id="statTotal">0</div>
+                    <div class="stat-card__label">案例总数</div>
+                </article>
+                <article class="stat-card">
+                    <div class="stat-card__icon">🥽</div>
+                    <div class="stat-card__number" id="statVR">0</div>
+                    <div class="stat-card__label">VR全景展厅</div>
+                </article>
+                <article class="stat-card">
+                    <div class="stat-card__icon">🌐</div>
+                    <div class="stat-card__number" id="statWeb">0</div>
+                    <div class="stat-card__label">网页叙事型</div>
+                </article>
+                <article class="stat-card">
+                    <div class="stat-card__icon">📁</div>
+                    <div class="stat-card__number" id="statArchive">0</div>
+                    <div class="stat-card__label">档案馆案例</div>
+                </article>
+                <article class="stat-card">
+                    <div class="stat-card__icon">🏛️</div>
+                    <div class="stat-card__number" id="statMuseum">0</div>
+                    <div class="stat-card__label">博物馆案例</div>
+                </article>
+            </section>
+
+            <!-- ===== 筛选栏 ===== -->
+            <section class="filter-bar" id="filterType" aria-label="按机构类型筛选">
+                <span class="filter-bar__label">机构类型</span>
+                <button class="filter-bar__tag active" data-filter="all">全部</button>
+                <button class="filter-bar__tag" data-filter="博物馆">🏛️ 博物馆</button>
+                <button class="filter-bar__tag" data-filter="档案馆">📁 档案馆</button>
+                <button class="filter-bar__tag" data-filter="纪念馆">🎖️ 纪念馆</button>
+                <button class="filter-bar__tag" data-filter="展览馆">🏛️ 展览馆</button>
+            </section>
+
+            <section class="filter-bar" id="filterFormat" aria-label="按展示形式筛选">
+                <span class="filter-bar__label">展示形式</span>
+                <button class="filter-bar__tag active" data-filter="all">全部</button>
+                <button class="filter-bar__tag" data-filter="VR">🥽 VR全景</button>
+                <button class="filter-bar__tag" data-filter="web">🌐 网页叙事</button>
+                <button class="filter-bar__tag" data-filter="3D">📦 3D展示</button>
+            </section>
+
+            <section class="filter-bar" id="filterDifficulty" aria-label="按制作难度筛选">
+                <span class="filter-bar__label">制作难度</span>
+                <button class="filter-bar__tag active" data-filter="all">全部</button>
+                <button class="filter-bar__tag" data-filter="1">⭐ 简单</button>
+                <button class="filter-bar__tag" data-filter="2">⭐⭐ 中等</button>
+                <button class="filter-bar__tag" data-filter="3">⭐⭐⭐ 复杂</button>
+            </section>
+
+            <!-- ===== 案例卡片列表 ===== -->
+            <section class="cases-section" id="casesSection" aria-label="案例详情列表">
+                <h2 class="section-title">案例详情</h2>
+                <p class="section-subtitle">点击左侧导航或滚动浏览全部案例 · 点击截图可放大查看</p>
+
+                <div class="cases-grid" id="casesGrid">
+                    <!-- JS 动态填充 -->
+                </div>
+
+                <!-- 无结果提示 -->
+                <div class="no-results" id="noResults">
+                    <div class="no-results__icon">🔍</div>
+                    <p class="no-results__text">未找到匹配的案例，请尝试调整筛选条件或搜索关键词</p>
+                </div>
+            </section>
+
+            <!-- ===== 案例对比表格 ===== -->
+            <section class="comparison-section" aria-label="案例横向对比">
+                <h2 class="section-title">案例横向对比</h2>
+                <p class="section-subtitle">从展示形式、交互方式、内容组织、技术实现、适用对象、优点、不足等维度进行横向比较</p>
+
+                <div class="comparison-table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>案例名称</th>
+                                <th>机构类型</th>
+                                <th>展示形式</th>
+                                <th>交互方式</th>
+                                <th>内容组织</th>
+                                <th>技术实现</th>
+                                <th>适用对象</th>
+                                <th>突出优点</th>
+                                <th>不足之处</th>
+                                <th>难度</th>
+                                <th>推荐</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comparisonBody">
+                            <!-- JS 动态填充 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ===== 优秀实践总结 ===== -->
+            <section class="summary-section" aria-label="优秀实践总结">
+                <h2 class="section-title">优秀实践总结与启示</h2>
+                <p class="section-subtitle">归纳国内虚拟展厅设计的共同特点，提炼可复用的设计方法论</p>
+
+                <div class="summary-card">
+                    <div class="summary-card__grid">
+                        <!-- 启示 1：技术分层与梯度设计 -->
+                        <article class="summary-insight">
+                            <div class="summary-insight__icon">🎯</div>
+                            <h3 class="summary-insight__title">技术分层与适用梯度</h3>
+                            <p class="summary-insight__text">
+                                优秀案例普遍采用"轻-中-重"三级技术梯度：轻量级H5/网页叙事适合档案馆和专题展览；
+                                中量级720°VR全景适合博物馆常设展厅的线上复制；
+                                重量级游戏引擎+VR大空间适合沉浸式深度体验。
+                                不同机构应根据自身资源与受众选择合适的技术层级，而非盲目追求最高配置。
+                                对本项目的启示：采用网页叙事型为主、辅以全景影像作为切入点是性价比较高的方案。
+                            </p>
+                        </article>
+
+                        <!-- 启示 2：内容为王 -->
+                        <article class="summary-insight">
+                            <div class="summary-insight__icon">📝</div>
+                            <h3 class="summary-insight__title">内容叙事驱动技术选择</h3>
+                            <p class="summary-insight__text">
+                                南京博物院的"单一IP深度开发"（《坤舆万国全图》一件文物撑起30分钟VR体验）、
+                                湖南博物院的马王堆专题深耕、陕西历史博物馆的唐墓壁画聚焦——这些案例证明，
+                                "以内容深度驱动技术深度"远比"技术堆砌+内容空洞"更有感染力。
+                                对本项目的启示：在策展阶段就要明确核心叙事线索，技术方案服务于叙事目标。
+                            </p>
+                        </article>
+
+                        <!-- 启示 3：长期主义与阶段性 -->
+                        <article class="summary-insight">
+                            <div class="summary-insight__icon">🏗️</div>
+                            <h3 class="summary-insight__title">平台化建设与持续迭代</h3>
+                            <p class="summary-insight__text">
+                                故宫近30年持续投入、国博的平台化数字资源体系、湖南博物院的自主算法研发——
+                                头部案例的共同特点是"长期主义"：不追求一次性项目交付，而是建设可生长、
+                                可复用的数字基础设施。数字敦煌从手动拼接进化到AI自动拼接的过程极具代表性。
+                                对本项目的启示：初期架构设计应预留扩展接口，避免"一次性项目"思维。
+                            </p>
+                        </article>
+
+                        <!-- 启示 4：多端适配 -->
+                        <article class="summary-insight">
+                            <div class="summary-insight__icon">📱</div>
+                            <h3 class="summary-insight__title">全渠道覆盖与分层体验</h3>
+                            <p class="summary-insight__text">
+                                案例中的领先机构普遍覆盖PC端（大屏深度浏览）、移动端（小程序/APP便捷触达）、
+                                线下端（VR大空间沉浸体验），形成"三端一体"的完整数字体验闭环。
+                                对本项目的启示：至少应实现PC端+移动端的响应式适配，以覆盖最广泛的用户群体。
+                            </p>
+                        </article>
+
+                        <!-- 启示 5：技术与人文 -->
+                        <article class="summary-insight">
+                            <div class="summary-insight__icon">⚖️</div>
+                            <h3 class="summary-insight__title">技术伦理与设计克制</h3>
+                            <p class="summary-insight__text">
+                                侵华日军南京大屠杀遇难同胞纪念馆的案例最值得深思：拒绝AI上色历史照片、
+                                反对以沉浸感消解历史严肃性、用"十二秒"水滴装置的极简隐喻替代炫技呈现——
+                                技术能力越强，越需要设计判断力来决定"不做什么"。
+                                对本项目的启示：在追求视觉效果的同时，始终保持对内容本质的尊重。
+                            </p>
+                        </article>
+
+                        <!-- 启示 6：用户参与 -->
+                        <article class="summary-insight">
+                            <div class="summary-insight__icon">🤝</div>
+                            <h3 class="summary-insight__title">社交互动与用户共创</h3>
+                            <p class="summary-insight__text">
+                                军博的"一起观展吧"在线组队、答题闯关和弹幕留言，广东省博的"虚拟策展人"小程序，
+                                上海博物馆的"美的历程"开放数据自主策展——社交化和用户共创正在成为数字展览的新趋势。
+                                对本项目的启示：即便在较为严肃的展览中，也可以适度引入分享、收藏、
+                                笔记等轻量社交功能，提升用户参与度和回访率。
+                            </p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ==================== 页脚 ==================== -->
+    <footer class="footer">
+        <span>© 2026 国内优秀虚拟展厅案例调研 · 仅供学习研究参考</span>
+        <div class="footer__stats">
+            <span class="footer__stat">📊 共 <strong id="caseCount">0</strong> 个案例</span>
+            <span class="footer__stat">📅 更新于 2026年7月</span>
+        </div>
+    </footer>
+
+    <!-- ==================== 图片灯箱 ==================== -->
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+        <button class="lightbox__close" aria-label="关闭">&times;</button>
+        <img class="lightbox__img" id="lightboxImg" src="" alt="">
+        <div class="lightbox__counter" id="lightboxCounter"></div>
+    </div>
+
+    <!-- ==================== 返回顶部按钮 ==================== -->
+    <button class="back-to-top" id="backToTop" title="返回顶部" aria-label="返回顶部">
+        ↑
+    </button>
+
+    <!-- ==================== JavaScript ==================== -->
+    <script src="js/main.js"></script>
+</body>
+</html>
