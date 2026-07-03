@@ -11,7 +11,6 @@
    - 图片灯箱
    - 返回顶部
    - 页面统计
-   - 对比表格生成
    ============================================================ */
 
 'use strict';
@@ -213,7 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
     cacheDOM();
     renderAllCases();
     renderStats();
-    renderComparisonTable();
     initSidebar();
     initSearch();
     initFilters();
@@ -242,7 +240,6 @@ function cacheDOM() {
     DOM.lightbox = document.getElementById('lightbox');
     DOM.lightboxImg = document.getElementById('lightboxImg');
     DOM.lightboxCounter = document.getElementById('lightboxCounter');
-    DOM.comparisonBody = document.getElementById('comparisonBody');
     DOM.statsTotal = document.getElementById('statTotal');
     DOM.statsCat1 = document.getElementById('statCat1');
     DOM.statsCat2 = document.getElementById('statCat2');
@@ -827,55 +824,6 @@ function closeMobileSidebar() {
     DOM.sidebar.classList.remove('open');
     DOM.sidebarOverlay.classList.remove('open');
     document.body.style.overflow = '';
-}
-
-// ========== 对比表格 ==========
-function renderComparisonTable() {
-    if (!DOM.comparisonBody) return;
-
-    const rows = casesData.map(c => {
-        const formatShort = c.format.includes('VR') ? 'VR全景' :
-                            c.format.includes('网页叙事') ? '网页叙事' :
-                            c.format.includes('3D') ? '3D展示' : c.format;
-        const interactionType = c.format.includes('VR') ? '全景漫游+热点' :
-                                c.format.includes('网页叙事') ? '滚动浏览+点击' :
-                                '多维交互';
-        const contentOrg = c.type === '档案馆' ? '档案分类+时间线' :
-                           c.type === '纪念馆' ? '主题叙事+史料' :
-                           '展品分类+专题';
-        const techImpl = c.difficulty >= 3 ? '高精度3D+VR+多媒体' :
-                         c.difficulty >= 2 ? 'VR全景+网页' :
-                         '网页+图片';
-
-        const targetAudience = c.scenes.includes('学术研究') ? '研究者+公众' :
-                               c.scenes.includes('青少年受众') ? '青少年+家庭' :
-                               c.scenes.includes('国际') ? '国内外公众' :
-                               '社会公众';
-
-        const strengths = c.features[0] || '—';
-        const weaknesses = c.difficulty >= 3 ? '需要较高带宽与技术支持' :
-                           c.difficulty <= 1 ? '交互深度有限' :
-                           '部分内容更新频率低';
-
-        return `
-            <tr>
-                <td class="case-name-col">${c.name.length > 20 ? c.name.substring(0, 18) + '…' : c.name}</td>
-                <td>${c.category}</td>
-                <td>${c.type}</td>
-                <td>${formatShort}</td>
-                <td>${interactionType}</td>
-                <td>${contentOrg}</td>
-                <td>${techImpl}</td>
-                <td>${targetAudience}</td>
-                <td>${strengths}</td>
-                <td>${weaknesses}</td>
-                <td>${'⭐'.repeat(c.difficulty)}</td>
-                <td>${c.recommend}</td>
-            </tr>
-        `;
-    }).join('');
-
-    DOM.comparisonBody.innerHTML = rows;
 }
 
 // ========== 全局函数暴露 ==========
