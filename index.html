@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="国内优秀虚拟展厅案例调研 — 系统梳理15个国内顶尖虚拟展厅案例，涵盖VR全景、网页叙事、3D展示等多种形式，提供深度分析与实践启示。">
-    <meta name="keywords" content="虚拟展厅,VR展厅,数字展览,博物馆数字化,数字敦煌,故宫,国博,线上展览">
+    <meta name="description" content="国内优秀虚拟展厅案例调研 — 精选5个国内顶尖虚拟展厅案例，按平面网页叙事型、全景扫描型、3D建模交互型、数据库/档案检索型四大分类组织，提供深度分析与实践启示。">
+    <meta name="keywords" content="虚拟展厅,VR展厅,数字展览,博物馆数字化,陕西历史博物馆,故宫,线上展览">
     <title>国内优秀虚拟展厅案例调研 | Virtual Exhibition Research</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230071e3'/><text x='16' y='22' text-anchor='middle' fill='white' font-size='18' font-weight='bold'>V</text></svg>">
@@ -58,6 +58,11 @@
 
         <!-- ========== 左侧导航栏 ========== -->
         <aside class="sidebar" id="sidebar" aria-label="案例导航">
+            <!-- 折叠按钮（桌面端） -->
+            <button class="sidebar__toggle" id="sidebarToggle" title="折叠导航栏" aria-label="折叠导航栏">
+                <span class="sidebar__toggle-icon">◀</span>
+            </button>
+
             <!-- 统计信息 -->
             <div class="sidebar__stats" id="sidebarStats">
                 <!-- JS 动态填充 -->
@@ -82,9 +87,9 @@
                 <h1 class="hero__title">国内优秀虚拟展厅案例调研</h1>
                 <p class="hero__subtitle">Virtual Exhibition Hall Research</p>
                 <p class="hero__desc">
-                    系统梳理国内15个顶尖虚拟展厅案例，涵盖博物馆、档案馆、纪念馆等多元机构类型，
-                    从展示形式、技术实现、内容组织、交互设计等维度进行深度分析与横向比较，
-                    提炼优秀实践启示，为数字展览建设提供参考。
+                    精选国内5个优秀虚拟展厅案例，按平面网页叙事型、全景扫描型、3D建模交互型、
+                    数据库/档案检索型四大分类组织，从展示形式、技术实现、内容组织、
+                    交互设计等维度进行深度分析与横向比较，提炼优秀实践启示，为数字展览建设提供参考。
                 </p>
             </section>
 
@@ -96,51 +101,35 @@
                     <div class="stat-card__label">案例总数</div>
                 </article>
                 <article class="stat-card">
-                    <div class="stat-card__icon">🥽</div>
-                    <div class="stat-card__number" id="statVR">0</div>
-                    <div class="stat-card__label">VR全景展厅</div>
-                </article>
-                <article class="stat-card">
                     <div class="stat-card__icon">🌐</div>
-                    <div class="stat-card__number" id="statWeb">0</div>
-                    <div class="stat-card__label">网页叙事型</div>
+                    <div class="stat-card__number" id="statCat1">0</div>
+                    <div class="stat-card__label">平面网页叙事型</div>
                 </article>
                 <article class="stat-card">
-                    <div class="stat-card__icon">📁</div>
-                    <div class="stat-card__number" id="statArchive">0</div>
-                    <div class="stat-card__label">档案馆案例</div>
+                    <div class="stat-card__icon">🥽</div>
+                    <div class="stat-card__number" id="statCat2">0</div>
+                    <div class="stat-card__label">全景扫描型</div>
                 </article>
                 <article class="stat-card">
-                    <div class="stat-card__icon">🏛️</div>
-                    <div class="stat-card__number" id="statMuseum">0</div>
-                    <div class="stat-card__label">博物馆案例</div>
+                    <div class="stat-card__icon">📦</div>
+                    <div class="stat-card__number" id="statCat3">0</div>
+                    <div class="stat-card__label">3D建模交互型</div>
+                </article>
+                <article class="stat-card">
+                    <div class="stat-card__icon">🗄️</div>
+                    <div class="stat-card__number" id="statCat4">0</div>
+                    <div class="stat-card__label">数据库/档案检索型</div>
                 </article>
             </section>
 
             <!-- ===== 筛选栏 ===== -->
-            <section class="filter-bar" id="filterType" aria-label="按机构类型筛选">
-                <span class="filter-bar__label">机构类型</span>
+            <section class="filter-bar" id="filterCategory" aria-label="按案例分类筛选">
+                <span class="filter-bar__label">案例分类</span>
                 <button class="filter-bar__tag active" data-filter="all">全部</button>
-                <button class="filter-bar__tag" data-filter="博物馆">🏛️ 博物馆</button>
-                <button class="filter-bar__tag" data-filter="档案馆">📁 档案馆</button>
-                <button class="filter-bar__tag" data-filter="纪念馆">🎖️ 纪念馆</button>
-                <button class="filter-bar__tag" data-filter="展览馆">🏛️ 展览馆</button>
-            </section>
-
-            <section class="filter-bar" id="filterFormat" aria-label="按展示形式筛选">
-                <span class="filter-bar__label">展示形式</span>
-                <button class="filter-bar__tag active" data-filter="all">全部</button>
-                <button class="filter-bar__tag" data-filter="VR">🥽 VR全景</button>
-                <button class="filter-bar__tag" data-filter="web">🌐 网页叙事</button>
-                <button class="filter-bar__tag" data-filter="3D">📦 3D展示</button>
-            </section>
-
-            <section class="filter-bar" id="filterDifficulty" aria-label="按制作难度筛选">
-                <span class="filter-bar__label">制作难度</span>
-                <button class="filter-bar__tag active" data-filter="all">全部</button>
-                <button class="filter-bar__tag" data-filter="1">⭐ 简单</button>
-                <button class="filter-bar__tag" data-filter="2">⭐⭐ 中等</button>
-                <button class="filter-bar__tag" data-filter="3">⭐⭐⭐ 复杂</button>
+                <button class="filter-bar__tag" data-filter="平面网页叙事型">🌐 平面网页叙事型</button>
+                <button class="filter-bar__tag" data-filter="全景扫描型">🥽 全景扫描型</button>
+                <button class="filter-bar__tag" data-filter="3D建模交互型">📦 3D建模交互型</button>
+                <button class="filter-bar__tag" data-filter="数据库/档案检索型">🗄️ 数据库/档案检索型</button>
             </section>
 
             <!-- ===== 案例卡片列表 ===== -->
@@ -169,6 +158,7 @@
                         <thead>
                             <tr>
                                 <th>案例名称</th>
+                                <th>分类</th>
                                 <th>机构类型</th>
                                 <th>展示形式</th>
                                 <th>交互方式</th>
@@ -195,75 +185,79 @@
 
                 <div class="summary-card">
                     <div class="summary-card__grid">
-                        <!-- 启示 1：技术分层与梯度设计 -->
+                        <!-- 启示 1：四大分类与适用梯度 -->
                         <article class="summary-insight">
                             <div class="summary-insight__icon">🎯</div>
-                            <h3 class="summary-insight__title">技术分层与适用梯度</h3>
+                            <h3 class="summary-insight__title">四大分类与适用梯度</h3>
                             <p class="summary-insight__text">
-                                优秀案例普遍采用"轻-中-重"三级技术梯度：轻量级H5/网页叙事适合档案馆和专题展览；
-                                中量级720°VR全景适合博物馆常设展厅的线上复制；
-                                重量级游戏引擎+VR大空间适合沉浸式深度体验。
-                                不同机构应根据自身资源与受众选择合适的技术层级，而非盲目追求最高配置。
-                                对本项目的启示：采用网页叙事型为主、辅以全景影像作为切入点是性价比较高的方案。
+                                5个案例恰好覆盖了虚拟展厅的四大类型：平面网页叙事型（陕西历史博物馆官网、大运河石刻文化）
+                                适合以内容阅读为主的专题展览，开发成本低、适用面广；全景扫描型（南京博物院VR）
+                                适合实体场馆的线上复制，沉浸感强；3D建模交互型（河南档案馆中福公司3D展厅）
+                                适合需要空间探索感的展览，交互自由度最高；
+                                数据库/档案检索型（故宫数字文物库）适合大规模藏品的系统化检索与学术研究。
+                                对本项目的启示：根据展览目标选择最匹配的类型，而非一味追求技术复杂度。
                             </p>
                         </article>
 
-                        <!-- 启示 2：内容为王 -->
+                        <!-- 启示 2：内容叙事驱动技术选择 -->
                         <article class="summary-insight">
                             <div class="summary-insight__icon">📝</div>
                             <h3 class="summary-insight__title">内容叙事驱动技术选择</h3>
                             <p class="summary-insight__text">
-                                南京博物院的"单一IP深度开发"（《坤舆万国全图》一件文物撑起30分钟VR体验）、
-                                湖南博物院的马王堆专题深耕、陕西历史博物馆的唐墓壁画聚焦——这些案例证明，
+                                大运河石刻文化线上展厅以"沿运河水系逐段探索"的线性叙事为骨架，
+                                陕西历史博物馆官网以"周秦汉唐"文化脉络组织首页叙事——
+                                这两个案例证明，优秀的虚拟展览总是先有清晰的叙事线索，再选择与之匹配的技术方案。
                                 "以内容深度驱动技术深度"远比"技术堆砌+内容空洞"更有感染力。
-                                对本项目的启示：在策展阶段就要明确核心叙事线索，技术方案服务于叙事目标。
+                                对本项目的启示：策展阶段就要明确核心叙事线索，技术方案服务于叙事目标。
                             </p>
                         </article>
 
-                        <!-- 启示 3：长期主义与阶段性 -->
+                        <!-- 启示 3：平台化建设与持续迭代 -->
                         <article class="summary-insight">
                             <div class="summary-insight__icon">🏗️</div>
                             <h3 class="summary-insight__title">平台化建设与持续迭代</h3>
                             <p class="summary-insight__text">
-                                故宫近30年持续投入、国博的平台化数字资源体系、湖南博物院的自主算法研发——
-                                头部案例的共同特点是"长期主义"：不追求一次性项目交付，而是建设可生长、
-                                可复用的数字基础设施。数字敦煌从手动拼接进化到AI自动拼接的过程极具代表性。
+                                故宫数字文物库是"长期主义"的典范——186万余件藏品持续收录、元数据标准不断迭代，
+                                从最初的基础检索到如今的高清像素级放大，体现了"不追求一次性项目交付，
+                                而是建设可生长、可复用的数字基础设施"的理念。
                                 对本项目的启示：初期架构设计应预留扩展接口，避免"一次性项目"思维。
                             </p>
                         </article>
 
-                        <!-- 启示 4：多端适配 -->
+                        <!-- 启示 4：多端适配与分层体验 -->
                         <article class="summary-insight">
                             <div class="summary-insight__icon">📱</div>
-                            <h3 class="summary-insight__title">全渠道覆盖与分层体验</h3>
+                            <h3 class="summary-insight__title">多端适配与分层体验</h3>
                             <p class="summary-insight__text">
-                                案例中的领先机构普遍覆盖PC端（大屏深度浏览）、移动端（小程序/APP便捷触达）、
-                                线下端（VR大空间沉浸体验），形成"三端一体"的完整数字体验闭环。
-                                对本项目的启示：至少应实现PC端+移动端的响应式适配，以覆盖最广泛的用户群体。
+                                陕西历史博物馆官网的响应式布局在PC端与移动端均有出色表现；
+                                河南档案馆3D展厅以WebGL技术实现跨平台3D浏览，无需安装插件或APP；
+                                故宫数字文物库兼容PC深度检索与移动端快速浏览两种使用场景。
+                                对本项目的启示：至少应实现PC端+移动端的响应式适配，覆盖最广泛的用户群体。
                             </p>
                         </article>
 
-                        <!-- 启示 5：技术与人文 -->
+                        <!-- 启示 5：设计美学与品牌一致性 -->
                         <article class="summary-insight">
-                            <div class="summary-insight__icon">⚖️</div>
-                            <h3 class="summary-insight__title">技术伦理与设计克制</h3>
+                            <div class="summary-insight__icon">🎨</div>
+                            <h3 class="summary-insight__title">设计美学与品牌一致性</h3>
                             <p class="summary-insight__text">
-                                侵华日军南京大屠杀遇难同胞纪念馆的案例最值得深思：拒绝AI上色历史照片、
-                                反对以沉浸感消解历史严肃性、用"十二秒"水滴装置的极简隐喻替代炫技呈现——
-                                技术能力越强，越需要设计判断力来决定"不做什么"。
-                                对本项目的启示：在追求视觉效果的同时，始终保持对内容本质的尊重。
+                                陕西历史博物馆的唐风美学与现代极简融合、大运河石刻文化的留白与排版节奏、
+                                南京博物院VR的展馆氛围还原——优秀案例普遍在视觉设计上做到了
+                                "内容调性—机构品牌—数字体验"三者的高度统一。
+                                对本项目的启示：数字展览不是孤立的技术项目，而是机构品牌在数字空间的延伸，
+                                视觉设计应深度呼应内容的文化质感。
                             </p>
                         </article>
 
-                        <!-- 启示 6：用户参与 -->
+                        <!-- 启示 6：从平面到3D的技术升级路径 -->
                         <article class="summary-insight">
-                            <div class="summary-insight__icon">🤝</div>
-                            <h3 class="summary-insight__title">社交互动与用户共创</h3>
+                            <div class="summary-insight__icon">📦</div>
+                            <h3 class="summary-insight__title">从平面到3D的技术升级路径</h3>
                             <p class="summary-insight__text">
-                                军博的"一起观展吧"在线组队、答题闯关和弹幕留言，广东省博的"虚拟策展人"小程序，
-                                上海博物馆的"美的历程"开放数据自主策展——社交化和用户共创正在成为数字展览的新趋势。
-                                对本项目的启示：即便在较为严肃的展览中，也可以适度引入分享、收藏、
-                                笔记等轻量社交功能，提升用户参与度和回访率。
+                                河南省档案馆的案例体现了从平面网页叙事到3D建模交互的典型升级路径：
+                                以同一批档案内容为基础，从"图文浏览"升级为"空间漫游"，显著提升了用户的
+                                探索自由度和沉浸感，同时保持了开发成本和维护难度的可控性。
+                                对本项目的启示：技术升级不必一步到位，可在已有内容基础上渐进式提升交互维度。
                             </p>
                         </article>
                     </div>

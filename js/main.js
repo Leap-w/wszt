@@ -5,7 +5,7 @@
    功能：
    - 案例数据管理
    - 实时搜索过滤
-   - 多维度筛选
+   - 四大分类筛选
    - 深色模式切换
    - 滚动动画与导航高亮
    - 图片灯箱
@@ -17,137 +17,77 @@
 'use strict';
 
 // ========== 案例数据 ==========
-// 每个案例包含完整字段，数据来源于实际调研
-const casesData = [
+// 按四大分类组织：平面网页叙事型 → 全景扫描型 → 3D建模交互型 → 数据库/档案检索型
+// 同一分类内按推荐指数降序排列
+const casesDataRaw = [
+    // ==================== 平面网页叙事型 ====================
     {
         id: 'case-01',
-        name: '河南省档案馆《中福公司档案史料展》云虚拟展厅',
-        org: '河南省档案馆',
-        url: 'https://www.hada.gov.cn/wszt/',
+        name: '陕西历史博物馆官方网站',
+        org: '陕西历史博物馆',
+        url: 'https://www.sxhm.com',
+        category: '平面网页叙事型',
+        categoryIcon: '🌐',
         format: '网页叙事型',
         formatIcon: '🌐',
-        type: '档案馆',
-        typeIcon: '📁',
-        difficulty: 1,
-        recommend: 78,
-        summary: '河南省档案馆以馆藏中福公司档案为基础，运用数字化手段打造的云虚拟展厅。展览通过网页叙事的方式，将中福公司从成立到发展的历史脉络以多媒体的形式生动呈现，融合了档案原件影像、历史照片、文献摘录与文字解说，是地方档案馆数字化转型的典型代表。',
+        type: '博物馆',
+        typeIcon: '🏛️',
+        difficulty: 2,
+        recommend: 90,
+        summary: '陕西历史博物馆官网首页以"周秦汉唐"文化底蕴为核心，通过典雅大气的视觉设计与精巧的动画交互，打造了极具东方美学的线上门户体验。页面采用唐风配色与现代极简主义相结合的设计语言，全屏轮播展示何家村窖藏、镶金兽首玛瑙杯等镇馆之宝，滚动视差与渐显动画营造沉浸式浏览叙事。响应式布局在PC端与移动端均有出色表现，是国内博物馆官网设计的标杆之作。',
         features: [
-            '以网页为核心载体，兼容PC与移动端，无需安装插件',
-            '档案高清扫描图像与文字解读同步呈现，信息密度合理',
-            '时间线叙事结构清晰，章节导航便于非专业观众理解',
-            '配色沉稳典雅，符合档案历史文化调性'
+            '唐风美学与现代极简融合的品牌视觉体系',
+            '首页全屏轮播展示镇馆之宝，过渡动画流畅自然',
+            '滚动视差与渐显动画营造沉浸式叙事节奏',
+            '响应式布局适配多端，导航与搜索交互细节精致'
         ],
         worthLearning: [
-            '地方档案馆轻量化数字展览的可复制方案',
-            '以内容叙事为核心、技术为辅助的设计理念',
-            '网页型展览的渐进式加载策略，兼顾体验与性能',
-            '档案数字化呈现的版权保护与清晰度平衡'
+            '文化机构官网的品牌视觉设计方法论',
+            '首页动画节奏与用户阅读体验的平衡技巧',
+            '传统文化元素的现代数字化转译思路',
+            '大流量门户网站的性能与美学兼顾策略'
         ],
-        scenes: ['地方档案馆', '专题档案展览', '历史文化教育'],
-        screenshots: [
-            { src: 'images/case01-01.jpg', alt: '中福公司档案史料展 - 展厅首页' },
-            { src: 'images/case01-02.jpg', alt: '中福公司档案史料展 - 历史时间线' },
-            { src: 'images/case01-03.jpg', alt: '中福公司档案史料展 - 档案原件展示' }
-        ]
+        scenes: ['博物馆官网设计', '文化品牌数字化', '交互动画设计'],
+        screenshots: []
     },
     {
         id: 'case-02',
-        name: '中国国家博物馆线上展览',
-        org: '中国国家博物馆',
-        url: 'https://www.chnmuseum.cn',
-        format: '网页叙事型 + 3D展示',
+        name: '大运河石刻文化线上展厅',
+        org: '中国大运河博物馆（扬州）',
+        url: 'https://houseoss.4dkankan.com/project/daYunHeShiKe/index.html#/main/2300',
+        category: '平面网页叙事型',
+        categoryIcon: '🌐',
+        format: '网页叙事型',
         formatIcon: '🌐',
         type: '博物馆',
         typeIcon: '🏛️',
-        difficulty: 3,
-        recommend: 92,
-        summary: '中国国家博物馆是国内博物馆数字化建设的领跑者，推出了一批高质量的线上展览。其数字展厅涵盖常设展与临时展，结合高清影像、三维文物展示与专业讲解，在网页端实现沉浸式观展。国博线上展览代表了国内博物馆数字化的最高水平之一，内容丰富、技术成熟、更新频率高。',
+        difficulty: 2,
+        recommend: 88,
+        summary: '中国大运河博物馆推出的"大运河石刻文化"线上专题展览，以网页叙事的形式深度挖掘运河沿线石刻文物的历史文化内涵。展览采用线性叙事结构，通过高清石刻拓片影像、地理位置标注与文字解说的有机结合，引导观众沿运河水系逐段探索石刻遗存。页面设计清雅简洁，充分运用留白与排版节奏营造沉浸式的文化阅读体验，是专题文物网页展览的优秀实践。',
         features: [
-            '支持文物3D旋转查看，精度达到0.1mm级',
-            '专题展览内容丰富，涵盖古代中国到近现代',
-            '配有专业语音导览，多语种支持',
-            '网站架构健壮，高并发下访问流畅'
+            '线性叙事引导观众沿运河逐段探索石刻遗存',
+            '石刻拓片高清影像与地理信息标注相结合',
+            '清雅极简的视觉设计，大量留白烘托文物质感',
+            '渐进式加载策略，兼顾高清画质与浏览流畅度'
         ],
         worthLearning: [
-            '大型博物馆线上展览的系统化建设思路',
-            '3D文物展示与网页加载性能的平衡方案',
-            '专业内容与大众传播的兼顾策略',
-            '多语种国际化呈现的技术架构'
+            '专题文物展览的线性叙事结构设计',
+            '石刻拓片等平面文物的高清数字化呈现方法',
+            '网页叙事型展览的信息密度与留白节奏控制',
+            '地理信息与文物展示的融合呈现思路'
         ],
-        scenes: ['大型博物馆', '文物3D展示', '国际文化交流'],
-        screenshots: [
-            { src: 'images/case02-01.jpg', alt: '中国国家博物馆线上展览 - 首页' },
-            { src: 'images/case02-02.jpg', alt: '中国国家博物馆线上展览 - 文物3D展示' },
-            { src: 'images/case02-03.jpg', alt: '中国国家博物馆线上展览 - 专题展' }
-        ]
+        scenes: ['专题文物展览', '石刻文化遗产', '线性叙事设计'],
+        screenshots: []
     },
+
+    // ==================== 全景扫描型 ====================
     {
         id: 'case-03',
-        name: '中国共产党历史展览馆数字展厅',
-        org: '中国共产党历史展览馆',
-        url: 'https://www.zgdszlg.cn',
-        format: 'VR全景 + 多媒体',
-        formatIcon: '🥽',
-        type: '展览馆',
-        typeIcon: '🏛️',
-        difficulty: 3,
-        recommend: 95,
-        summary: '中国共产党历史展览馆数字展厅以高精度VR全景技术为核心，对实体展馆进行了1:1数字化还原。展览通过全景漫游、热点交互、视频嵌入等多媒体手段，系统地展示了中国共产党百年奋斗历程。技术水准与内容深度均属国内顶尖，是红色文化数字化传播的标杆项目。',
-        features: [
-            '实景1:1高精度VR还原，画质细腻',
-            '多楼层无缝漫游，空间导航直观',
-            '嵌入珍贵历史影像与文献资料的热点交互',
-            '配套移动端APP，支持跨平台访问'
-        ],
-        worthLearning: [
-            '大型实体展馆的完整数字化复制技术方案',
-            'VR场景中多媒体热点的设计规范',
-            '红色历史文化与现代数字技术的融合方式',
-            '超高精度全景图的加载优化策略'
-        ],
-        scenes: ['大型展馆数字化', '红色教育', '1:1实景还原'],
-        screenshots: [
-            { src: 'images/case03-01.svg', alt: '党史展览馆数字展厅 - 入口大厅' },
-            { src: 'images/case03-02.svg', alt: '党史展览馆数字展厅 - VR全景' },
-            { src: 'images/case03-03.svg', alt: '党史展览馆数字展厅 - 多媒体热点' }
-        ]
-    },
-    {
-        id: 'case-04',
-        name: '故宫博物院数字文物库',
-        org: '故宫博物院',
-        url: 'https://www.dpm.org.cn',
-        format: '高清影像 + 数据库',
-        formatIcon: '🖼️',
-        type: '博物馆',
-        typeIcon: '🏛️',
-        difficulty: 3,
-        recommend: 96,
-        summary: '故宫博物院数字文物库是国内规模最大的博物馆藏品数字化项目之一，收录了超过186万件（套）馆藏文物的高清影像资料。平台以数据库检索为核心，结合分类浏览、关键词搜索、高清放大等功能，为研究者与公众提供了前所未有的文物数字访问体验。其数据标准化程度在国内文博领域处于领先地位。',
-        features: [
-            '186万+件藏品在线，覆盖故宫全部品类',
-            '支持按品类、年代、材质等多维度检索',
-            '高清大图支持像素级放大，细节清晰',
-            '开放的元数据标准，便于学术引用'
-        ],
-        worthLearning: [
-            '超大规模藏品数据库的架构设计',
-            '文物元数据标准化与跨平台互操作',
-            '面向研究者的专业检索与公众浏览的平衡',
-            '文化遗产数字化的国际标准接轨'
-        ],
-        scenes: ['藏品数据库', '学术研究', '文化遗产保护'],
-        screenshots: [
-            { src: 'images/case04-01.jpg', alt: '故宫数字文物库 - 首页' },
-            { src: 'images/case04-02.jpg', alt: '故宫数字文物库 - 藏品检索' },
-            { src: 'images/case04-03.jpg', alt: '故宫数字文物库 - 高清大图' }
-        ]
-    },
-    {
-        id: 'case-05',
         name: '南京博物院VR展厅',
         org: '南京博物院',
-        url: 'https://www.njmuseum.com',
+        url: 'https://www.njmuseum.com/zh/exhibitionIndex',
+        category: '全景扫描型',
+        categoryIcon: '🥽',
         format: 'VR全景',
         formatIcon: '🥽',
         type: '博物馆',
@@ -174,328 +114,94 @@ const casesData = [
             { src: 'images/case05-03.jpg', alt: '南京博物院VR展厅 - 展品热点' }
         ]
     },
+
+    // ==================== 3D建模交互型 ====================
     {
-        id: 'case-06',
-        name: '中国大运河博物馆VR展厅',
-        org: '中国大运河博物馆（扬州）',
-        url: 'https://canalmuseum.net',
-        format: 'VR全景 + 多媒体',
-        formatIcon: '🥽',
-        type: '博物馆',
-        typeIcon: '🏛️',
-        difficulty: 3,
-        recommend: 88,
-        summary: '中国大运河博物馆位于扬州，是一座以大运河文化为主题的现代化博物馆。其VR线上展厅依托实体场馆丰富的展陈资源，运用全景拍摄与多媒体融合技术，打造了沉浸式的大运河文化体验。展览以"运河文化"为主线，在VR空间中融入了大量动态元素与交互设计，是主题性博物馆数字化的创新实践。',
-        features: [
-            '主题化的VR场景设计，融入运河元素视觉风格',
-            '动态水景与声效模拟，增强沉浸感',
-            '多点触发热点详细解读运河文化',
-            '线上预约与VR导览系统联动'
-        ],
-        worthLearning: [
-            '主题博物馆VR展示的沉浸式氛围营造',
-            '动态元素在全景场景中的技术实现',
-            '文化主题与数字展示的深度融合',
-            '新建博物馆同步规划数字展厅的经验'
-        ],
-        scenes: ['主题博物馆', '沉浸式体验', '文化IP数字化'],
-        screenshots: [
-            { src: 'images/case06-01.jpg', alt: '大运河博物馆VR展厅 - 入口' },
-            { src: 'images/case06-02.jpg', alt: '大运河博物馆VR展厅 - 展厅内部' },
-            { src: 'images/case06-03.jpg', alt: '大运河博物馆VR展厅 - 多媒体互动' }
-        ]
-    },
-    {
-        id: 'case-07',
-        name: '上海博物馆数字展览',
-        org: '上海博物馆',
-        url: 'https://www.shanghaimuseum.net',
-        format: '网页叙事型 + 3D展示',
-        formatIcon: '🌐',
-        type: '博物馆',
-        typeIcon: '🏛️',
-        difficulty: 3,
-        recommend: 90,
-        summary: '上海博物馆是国内最早开展数字化的博物馆之一，其数字展览平台整合了常设展与精品特展的线上内容。不同于纯VR方案，上博更注重网页端的叙事体验，结合文物高清影像、三维模型与专业学术文本，以图文并茂的方式呈现展览内容。设计风格典雅简约，体现了海派文化的精致品味。',
-        features: [
-            '典雅的视觉设计，与上博品牌调性高度统一',
-            '文物高清影像与专业学术文本的紧密结合',
-            '支持文物三维模型在线查看与交互',
-            '内容丰富，定期更新特展线上版'
-        ],
-        worthLearning: [
-            '博物馆品牌调性与数字平台设计的一致性原则',
-            '文物学术内容的大众化呈现方法',
-            '网页端与移动端的差异化设计策略',
-            '高端文化机构的数字设计审美标准'
-        ],
-        scenes: ['大型博物馆', '学术型展览', '品牌数字体验'],
-        screenshots: [
-            { src: 'images/case07-01.jpg', alt: '上海博物馆数字展览 - 首页' },
-            { src: 'images/case07-02.jpg', alt: '上海博物馆数字展览 - 文物展示' },
-            { src: 'images/case07-03.jpg', alt: '上海博物馆数字展览 - 3D文物' }
-        ]
-    },
-    {
-        id: 'case-08',
-        name: '陕西历史博物馆VR展厅',
-        org: '陕西历史博物馆',
-        url: 'https://www.sxhm.com',
-        format: 'VR全景',
-        formatIcon: '🥽',
-        type: '博物馆',
-        typeIcon: '🏛️',
-        difficulty: 2,
-        recommend: 86,
-        summary: '陕西历史博物馆拥有丰富的周秦汉唐文物收藏，其VR展厅以实景拍摄为基础，对常设展厅进行了720°全景数字化。展览涵盖从史前到唐代的多个展厅空间，结合重点文物的高清图片热点，为观众提供了便捷的远程参观通道。作为西北地区文博数字化的代表，其VR系统稳定可靠、操作易上手。',
-        features: [
-            '覆盖常设展厅的完整VR导览',
-            '重点文物配备高清大图热点',
-            '简洁直观的场景导航控件',
-            '加载速度快，适配多种网络环境'
-        ],
-        worthLearning: [
-            '文物大省的VR展厅标准化建设路径',
-            '兼顾文物丰富度与VR浏览体验的平衡',
-            '低带宽环境下的VR加载优化',
-            '老年观众友好型VR界面设计'
-        ],
-        scenes: ['省级博物馆', '历史文化', '远程参观'],
-        screenshots: [
-            { src: 'images/case08-01.jpg', alt: '陕西历史博物馆VR展厅 - 大厅' },
-            { src: 'images/case08-02.jpg', alt: '陕西历史博物馆VR展厅 - 展厅内部' },
-            { src: 'images/case08-03.jpg', alt: '陕西历史博物馆VR展厅 - 文物热点' }
-        ]
-    },
-    {
-        id: 'case-09',
-        name: '湖南博物院数字展览',
-        org: '湖南博物院',
-        url: 'https://www.hnmuseum.com',
-        format: 'VR全景 + 网页叙事',
-        formatIcon: '🥽',
-        type: '博物馆',
-        typeIcon: '🏛️',
-        difficulty: 3,
-        recommend: 89,
-        summary: '湖南博物院（原湖南省博物馆）以马王堆汉墓文物为核心资源，建设了高水平的数字展览体系。其线上展厅融合了VR全景与网页叙事两种形式，既提供身临其境的全景漫游体验，也包含结构清晰的专题网页展览。对马王堆出土文物的数字化呈现尤为突出，是专题文物数字展示的行业标杆。',
-        features: [
-            'VR全景与网页叙事双模式灵活切换',
-            '马王堆文物专题数字化程度极高',
-            'VR场景中嵌入动画还原古代场景',
-            '科普性与学术性兼顾的内容编排'
-        ],
-        worthLearning: [
-            '重磅文物IP的全方位数字化策略',
-            'VR与网页两种形式的内容互补设计',
-            '考古发现在数字展览中的叙事重构',
-            '动画还原在历史类展览中的应用'
-        ],
-        scenes: ['专题文物展示', '考古成果数字化', '科普教育'],
-        screenshots: [
-            { src: 'images/case09-01.jpg', alt: '湖南博物院数字展览 - 首页' },
-            { src: 'images/case09-02.jpg', alt: '湖南博物院数字展览 - 马王堆专题' },
-            { src: 'images/case09-03.jpg', alt: '湖南博物院数字展览 - VR全景' }
-        ]
-    },
-    {
-        id: 'case-10',
-        name: '广东省博物馆VR展厅',
-        org: '广东省博物馆',
-        url: 'https://www.gdmuseum.com',
-        format: 'VR全景',
-        formatIcon: '🥽',
-        type: '博物馆',
-        typeIcon: '🏛️',
-        difficulty: 2,
-        recommend: 82,
-        summary: '广东省博物院立足岭南文化，建设了涵盖历史馆、自然馆、艺术馆等区域的VR线上展厅。其VR系统以全景摄影为基础，配合展品信息弹窗与语音导览，为粤港澳大湾区观众提供了便捷的在线观展服务。展览注重岭南地方特色与多元文化的呈现，在展示形式上追求简洁高效。',
-        features: [
-            '多馆区VR内容统一管理',
-            '岭南文化特色鲜明的内容策划',
-            '支持粤语等多语言语音导览',
-            '线上展览定期与线下临展同步更新'
-        ],
-        worthLearning: [
-            '地方文化特色的数字化呈现方法',
-            '多语言（含方言）导览的多版本管理',
-            '线上展览与线下临展联动的运营模式',
-            '大湾区文化机构的数字协作模式'
-        ],
-        scenes: ['地方博物馆', '区域文化传播', '线上线下联动'],
-        screenshots: [
-            { src: 'images/case10-01.svg', alt: '广东省博物院VR展厅 - 大厅' },
-            { src: 'images/case10-02.svg', alt: '广东省博物院VR展厅 - 展厅内部' },
-            { src: 'images/case10-03.svg', alt: '广东省博物院VR展厅 - 展品热点' }
-        ]
-    },
-    {
-        id: 'case-11',
-        name: '中国人民革命军事博物馆数字展厅',
-        org: '中国人民革命军事博物馆',
-        url: 'https://www.jb.mil.cn',
-        format: 'VR全景 + 多媒体',
-        formatIcon: '🥽',
-        type: '纪念馆',
-        typeIcon: '🎖️',
-        difficulty: 3,
-        recommend: 93,
-        summary: '中国人民革命军事博物馆（军博）数字展厅以武器装备展示与军事历史教育为核心，运用VR全景、三维建模与互动多媒体技术，打造了高度沉浸的军事主题数字展览。展览涵盖了从古代军事到现代国防的丰富内容，特别在大型装备（飞机、坦克、舰船）的数字化呈现上有突出表现，是军事类博物馆数字化的标杆。',
-        features: [
-            '大型武器装备的1:1三维建模与交互展示',
-            '军事历史场景的沉浸式VR还原',
-            '兵器互动拆解与结构透视功能',
-            '国防教育内容的严肃性与互动性的平衡'
-        ],
-        worthLearning: [
-            '大型实物展品的三维数字化方案',
-            '军事主题数字展览的严肃性与互动性平衡',
-            '大型装备的交互式拆解展示技术',
-            '国防教育内容的数字化叙事设计'
-        ],
-        scenes: ['军事博物馆', '大型装备展示', '国防教育'],
-        screenshots: [
-            { src: 'images/case11-01.svg', alt: '军博数字展厅 - 大厅' },
-            { src: 'images/case11-02.svg', alt: '军博数字展厅 - 装备展示' },
-            { src: 'images/case11-03.svg', alt: '军博数字展厅 - 多媒体互动' }
-        ]
-    },
-    {
-        id: 'case-12',
-        name: '中国国家版本馆数字展览',
-        org: '中国国家版本馆',
-        url: 'https://www.cnapc.cn',
-        format: '网页叙事型 + 高清影像',
-        formatIcon: '🌐',
+        id: 'case-04',
+        name: '河南省档案馆《中福公司档案史料展》云虚拟展厅',
+        org: '河南省档案馆',
+        url: 'http://www.vrzan.com/customviewer/PQQ2BMV1/3d',
+        category: '3D建模交互型',
+        categoryIcon: '📦',
+        format: '3D建模 + 交互展示',
+        formatIcon: '📦',
         type: '档案馆',
         typeIcon: '📁',
-        difficulty: 3,
-        recommend: 87,
-        summary: '中国国家版本馆（文瀚阁）是国家版本资源总库，其数字展览以中华版本资源为核心，通过网页叙事与高清影像相结合的方式，展示了从甲骨文到数字时代的版本演变。展览设计庄重大气，内容编排学理性强，是国家重大文化工程数字化传播的典范。其"一总三分"的馆藏体系也在数字平台上得到了清晰呈现。',
+        difficulty: 2,
+        recommend: 80,
+        summary: '河南省档案馆以馆藏中福公司档案为基础，运用3D建模与交互展示技术打造的云虚拟展厅。展览通过三维空间建模还原了实体展厅的空间格局，观众可以在3D场景中自由漫游、缩放视角、点击展品查阅档案高清影像与文献解读。相比平面网页叙事型展览，3D交互提供了更强的空间沉浸感和自主探索的自由度，是地方档案馆数字化转型中技术升级的典型代表。',
         features: [
-            '以版本学为核心的专题内容组织',
-            '高清影像与学术文本紧密结合',
-            '"一总三分"馆藏体系的数字化呈现',
-            '涵盖从古籍到数字版本的宏大叙事'
+            '3D空间建模还原实体展厅格局，自由漫游探索',
+            '展品支持点击放大查阅高清档案影像',
+            '三维空间导航直观，视角缩放与旋转操作流畅',
+            '融合档案原件影像、历史照片与文字解说的多媒体热点'
         ],
         worthLearning: [
-            '国家重大文化工程的数字传播策略',
-            '版本学专业内容的大众化叙事方式',
-            '多场馆（总馆+分馆）数字内容的统一架构',
-            '中华文明延续性的数字叙事设计'
+            '地方档案馆从平面网页到3D交互的技术升级路径',
+            '3D展厅中展品信息热点的交互设计规范',
+            '轻量化3D建模在档案展览中的性价比平衡',
+            '档案数字化呈现的空间叙事设计思路'
         ],
-        scenes: ['国家文化工程', '版本资源', '文化传承'],
+        scenes: ['地方档案馆', '3D展厅', '档案数字化'],
         screenshots: [
-            { src: 'images/case12-01.jpg', alt: '国家版本馆数字展览 - 首页' },
-            { src: 'images/case12-02.jpg', alt: '国家版本馆数字展览 - 版本展示' },
-            { src: 'images/case12-03.jpg', alt: '国家版本馆数字展览 - 珍品高清' }
+            { src: 'images/case01-01.jpg', alt: '中福公司档案史料展 - 展厅首页' },
+            { src: 'images/case01-02.jpg', alt: '中福公司档案史料展 - 历史时间线' },
+            { src: 'images/case01-03.jpg', alt: '中福公司档案史料展 - 档案原件展示' }
         ]
     },
+
+    // ==================== 数据库/档案检索型 ====================
     {
-        id: 'case-13',
-        name: '数字敦煌',
-        org: '敦煌研究院',
-        url: 'https://www.e-dunhuang.com',
-        format: 'VR全景 + 3D + 高清影像',
-        formatIcon: '🥽',
+        id: 'case-05',
+        name: '故宫博物院数字文物库',
+        org: '故宫博物院',
+        url: 'https://digicol.dpm.org.cn/',
+        category: '数据库/档案检索型',
+        categoryIcon: '🗄️',
+        format: '高清影像 + 数据库',
+        formatIcon: '🖼️',
         type: '博物馆',
         typeIcon: '🏛️',
         difficulty: 3,
-        recommend: 98,
-        summary: '"数字敦煌"是敦煌研究院主导的世界级文化遗产数字化保护项目，以莫高窟石窟为核心，综合运用VR全景、三维重建、高清摄影和计算机图形学技术，对敦煌石窟进行了全面的数字化记录与呈现。项目不仅实现了洞窟的虚拟漫游，还建立了详尽的壁画与彩塑数据库，是世界文化遗产数字化的典范之作，代表了国内文博数字化的最高水准。',
+        recommend: 96,
+        summary: '故宫博物院数字文物库是国内规模最大的博物馆藏品数字化项目之一，收录了超过186万件（套）馆藏文物的高清影像资料。平台以数据库检索为核心，结合分类浏览、关键词搜索、高清放大等功能，为研究者与公众提供了前所未有的文物数字访问体验。其数据标准化程度在国内文博领域处于领先地位。',
         features: [
-            '全球领先的石窟三维数字化重建精度',
-            'VR漫游与超高分辨率壁画浏览无缝切换',
-            '完善的学术数据库，支持多维度检索',
-            '中英文双语，面向全球开放访问'
+            '186万+件藏品在线，覆盖故宫全部品类',
+            '支持按品类、年代、材质等多维度检索',
+            '高清大图支持像素级放大，细节清晰',
+            '开放的元数据标准，便于学术引用'
         ],
         worthLearning: [
-            '世界文化遗产数字化的中国方案与标准',
-            '超高精度影像采集与网络传输的平衡',
-            '数字化成果的学术研究价值最大化',
-            '文物保护与数字开放的长期可持续发展模式'
+            '超大规模藏品数据库的架构设计',
+            '文物元数据标准化与跨平台互操作',
+            '面向研究者的专业检索与公众浏览的平衡',
+            '文化遗产数字化的国际标准接轨'
         ],
-        scenes: ['世界遗产数字化', '石窟寺保护', '国际学术交流'],
+        scenes: ['藏品数据库', '学术研究', '文化遗产保护'],
         screenshots: [
-            { src: 'images/case13-01.jpg', alt: '数字敦煌 - 首页' },
-            { src: 'images/case13-02.jpg', alt: '数字敦煌 - 洞窟VR全景' },
-            { src: 'images/case13-03.jpg', alt: '数字敦煌 - 壁画高清' }
-        ]
-    },
-    {
-        id: 'case-14',
-        name: '中国航天博物馆数字展厅',
-        org: '中国航天博物馆',
-        url: 'https://www.casc-spacemuseum.com',
-        format: 'VR全景 + 3D建模',
-        formatIcon: '🥽',
-        type: '博物馆',
-        typeIcon: '🏛️',
-        difficulty: 3,
-        recommend: 84,
-        summary: '中国航天博物馆数字展厅以中国航天事业发展历程为核心，运用VR全景与三维建模技术，展示了运载火箭、卫星、载人航天器等珍贵实物与模型。数字展厅突破了实体场馆的空间限制，不仅展示了实体展品，还通过三维动画模拟了火箭发射、卫星在轨运行等动态过程，是科技类博物馆数字化的特色实践。',
-        features: [
-            '航天器三维模型可在VR场景中多角度查看',
-            '动画模拟火箭发射、卫星运行等动态过程',
-            '航天科普内容丰富，适合青少年教育',
-            '线上线下联动，定期更新最新航天成果'
-        ],
-        worthLearning: [
-            '科技类博物馆的动态过程数字化呈现',
-            '三维动画在科普数字展览中的应用',
-            '航天主题展览的青少年受众设计',
-            '科技成果的快速数字化更新机制'
-        ],
-        scenes: ['科技博物馆', '科普教育', '青少年受众'],
-        screenshots: [
-            { src: 'images/case14-01.jpg', alt: '航天博物馆数字展厅 - 大厅' },
-            { src: 'images/case14-02.jpg', alt: '航天博物馆数字展厅 - 火箭模型' },
-            { src: 'images/case14-03.jpg', alt: '航天博物馆数字展厅 - 航天器展示' }
-        ]
-    },
-    {
-        id: 'case-15',
-        name: '侵华日军南京大屠杀遇难同胞纪念馆数字展览',
-        org: '侵华日军南京大屠杀遇难同胞纪念馆',
-        url: 'https://www.19371213.com.cn',
-        format: '网页叙事型 + 多媒体',
-        formatIcon: '🌐',
-        type: '纪念馆',
-        typeIcon: '🎖️',
-        difficulty: 3,
-        recommend: 91,
-        summary: '侵华日军南京大屠杀遇难同胞纪念馆数字展览以严肃、庄重的方式，通过网页叙事与多媒体相结合，在线呈现了南京大屠杀的历史真相。展览巧妙地将史料、证言、影像等元素以数字化方式组织，在尊重历史、缅怀逝者的原则下，实现了历史教育的广泛传播。其设计克制而有力，是纪念类场馆数字化的杰出范例。',
-        features: [
-            '庄重克制的视觉设计，契合纪念主题',
-            '史料、证言、影像的多维叙事结构',
-            '幸存者证言视频与文字档案的有机结合',
-            '多语种支持，面向国际传播历史真相'
-        ],
-        worthLearning: [
-            '纪念类场馆数字化的情感设计原则',
-            '严肃历史题材的数字化叙事伦理',
-            '多语种历史内容的国际化传播策略',
-            '史料数字化与真实性验证的技术方案'
-        ],
-        scenes: ['纪念类场馆', '历史教育', '国际传播'],
-        screenshots: [
-            { src: 'images/case15-01.jpg', alt: '南京大屠杀纪念馆数字展览 - 首页' },
-            { src: 'images/case15-02.jpg', alt: '南京大屠杀纪念馆数字展览 - 史料展示' },
-            { src: 'images/case15-03.jpg', alt: '南京大屠杀纪念馆数字展览 - 多媒体叙事' }
+            { src: 'images/case04-01.jpg', alt: '故宫数字文物库 - 首页' },
+            { src: 'images/case04-02.jpg', alt: '故宫数字文物库 - 藏品检索' },
+            { src: 'images/case04-03.jpg', alt: '故宫数字文物库 - 高清大图' }
         ]
     }
 ];
+
+// 按四大分类排序：平面网页叙事型 → 全景扫描型 → 3D建模交互型 → 数据库/档案检索型
+// 同一分类内保持数据中的顺序（推荐指数已降序）
+const CATEGORY_ORDER = ['平面网页叙事型', '全景扫描型', '3D建模交互型', '数据库/档案检索型'];
+const casesData = [...casesDataRaw].sort((a, b) => {
+    const ai = CATEGORY_ORDER.indexOf(a.category);
+    const bi = CATEGORY_ORDER.indexOf(b.category);
+    if (ai !== bi) return ai - bi;
+    return b.recommend - a.recommend;
+});
 
 // ========== DOM 引用缓存 ==========
 let DOM = {};
 
 // ========== 应用状态 ==========
 const state = {
-    activeFilters: {
-        type: 'all',
-        format: 'all',
-        difficulty: 'all'
-    },
+    activeCategory: 'all',
     searchQuery: '',
     darkMode: false,
     currentLightboxIndex: -1,
@@ -530,9 +236,7 @@ function cacheDOM() {
     DOM.casesGrid = document.getElementById('casesGrid');
     DOM.noResults = document.getElementById('noResults');
     DOM.searchInput = document.getElementById('searchInput');
-    DOM.filterType = document.getElementById('filterType');
-    DOM.filterFormat = document.getElementById('filterFormat');
-    DOM.filterDifficulty = document.getElementById('filterDifficulty');
+    DOM.filterCategory = document.getElementById('filterCategory');
     DOM.themeToggle = document.getElementById('themeToggle');
     DOM.backToTop = document.getElementById('backToTop');
     DOM.lightbox = document.getElementById('lightbox');
@@ -540,10 +244,10 @@ function cacheDOM() {
     DOM.lightboxCounter = document.getElementById('lightboxCounter');
     DOM.comparisonBody = document.getElementById('comparisonBody');
     DOM.statsTotal = document.getElementById('statTotal');
-    DOM.statsVR = document.getElementById('statVR');
-    DOM.statsWeb = document.getElementById('statWeb');
-    DOM.statsArchive = document.getElementById('statArchive');
-    DOM.statsMuseum = document.getElementById('statMuseum');
+    DOM.statsCat1 = document.getElementById('statCat1');
+    DOM.statsCat2 = document.getElementById('statCat2');
+    DOM.statsCat3 = document.getElementById('statCat3');
+    DOM.statsCat4 = document.getElementById('statCat4');
     DOM.mobileNavToggle = document.getElementById('mobileNavToggle');
     DOM.sidebarOverlay = document.getElementById('sidebarOverlay');
     DOM.caseCount = document.getElementById('caseCount');
@@ -567,36 +271,26 @@ function hideLoader() {
 // ========== 统计信息 ==========
 function renderStats() {
     const total = casesData.length;
-    const vrCount = casesData.filter(c => c.format.includes('VR')).length;
-    const webCount = casesData.filter(c => c.format.includes('网页叙事')).length;
-    const archiveCount = casesData.filter(c => c.type === '档案馆').length;
-    const museumCount = casesData.filter(c => c.type === '博物馆').length;
+    const cat1 = casesData.filter(c => c.category === '平面网页叙事型').length;
+    const cat2 = casesData.filter(c => c.category === '全景扫描型').length;
+    const cat3 = casesData.filter(c => c.category === '3D建模交互型').length;
+    const cat4 = casesData.filter(c => c.category === '数据库/档案检索型').length;
 
     // 顶部统计卡片
-    if (DOM.statsTotal) {
-        animateNumber(DOM.statsTotal, total);
-    }
-    if (DOM.statsVR) {
-        animateNumber(DOM.statsVR, vrCount);
-    }
-    if (DOM.statsWeb) {
-        animateNumber(DOM.statsWeb, webCount);
-    }
-    if (DOM.statsArchive) {
-        animateNumber(DOM.statsArchive, archiveCount);
-    }
-    if (DOM.statsMuseum) {
-        animateNumber(DOM.statsMuseum, museumCount);
-    }
+    if (DOM.statsTotal) animateNumber(DOM.statsTotal, total);
+    if (DOM.statsCat1) animateNumber(DOM.statsCat1, cat1);
+    if (DOM.statsCat2) animateNumber(DOM.statsCat2, cat2);
+    if (DOM.statsCat3) animateNumber(DOM.statsCat3, cat3);
+    if (DOM.statsCat4) animateNumber(DOM.statsCat4, cat4);
 
     // 侧边栏统计
     if (DOM.sidebarStats) {
         DOM.sidebarStats.innerHTML = `
             <div class="sidebar__stat-row"><span>案例总数</span><span>${total}</span></div>
-            <div class="sidebar__stat-row"><span>VR展厅</span><span>${vrCount}</span></div>
-            <div class="sidebar__stat-row"><span>网页叙事型</span><span>${webCount}</span></div>
-            <div class="sidebar__stat-row"><span>档案馆</span><span>${archiveCount}</span></div>
-            <div class="sidebar__stat-row"><span>博物馆</span><span>${museumCount}</span></div>
+            <div class="sidebar__stat-row"><span>平面网页叙事型</span><span>${cat1}</span></div>
+            <div class="sidebar__stat-row"><span>全景扫描型</span><span>${cat2}</span></div>
+            <div class="sidebar__stat-row"><span>3D建模交互型</span><span>${cat3}</span></div>
+            <div class="sidebar__stat-row"><span>数据库/档案检索型</span><span>${cat4}</span></div>
         `;
     }
 
@@ -631,34 +325,12 @@ function animateNumber(el, target) {
 
 // ========== 筛选功能 ==========
 function initFilters() {
-    // 机构类型筛选
-    if (DOM.filterType) {
-        DOM.filterType.querySelectorAll('.filter-bar__tag').forEach(tag => {
+    // 案例分类筛选
+    if (DOM.filterCategory) {
+        DOM.filterCategory.querySelectorAll('.filter-bar__tag').forEach(tag => {
             tag.addEventListener('click', () => {
-                setActiveTag(DOM.filterType, tag);
-                state.activeFilters.type = tag.dataset.filter;
-                applyAllFilters();
-            });
-        });
-    }
-
-    // 展示形式筛选
-    if (DOM.filterFormat) {
-        DOM.filterFormat.querySelectorAll('.filter-bar__tag').forEach(tag => {
-            tag.addEventListener('click', () => {
-                setActiveTag(DOM.filterFormat, tag);
-                state.activeFilters.format = tag.dataset.filter;
-                applyAllFilters();
-            });
-        });
-    }
-
-    // 制作难度筛选
-    if (DOM.filterDifficulty) {
-        DOM.filterDifficulty.querySelectorAll('.filter-bar__tag').forEach(tag => {
-            tag.addEventListener('click', () => {
-                setActiveTag(DOM.filterDifficulty, tag);
-                state.activeFilters.difficulty = tag.dataset.filter;
+                setActiveTag(DOM.filterCategory, tag);
+                state.activeCategory = tag.dataset.filter;
                 applyAllFilters();
             });
         });
@@ -684,31 +356,9 @@ function initSearch() {
 function applyAllFilters() {
     let filtered = [...casesData];
 
-    // 机构类型过滤
-    if (state.activeFilters.type !== 'all') {
-        filtered = filtered.filter(c => c.type === state.activeFilters.type);
-    }
-
-    // 展示形式过滤
-    if (state.activeFilters.format !== 'all') {
-        filtered = filtered.filter(c => {
-            if (state.activeFilters.format === 'VR') {
-                return c.format.includes('VR');
-            }
-            if (state.activeFilters.format === 'web') {
-                return c.format.includes('网页叙事');
-            }
-            if (state.activeFilters.format === '3D') {
-                return c.format.includes('3D');
-            }
-            return true;
-        });
-    }
-
-    // 难度过滤
-    if (state.activeFilters.difficulty !== 'all') {
-        const diffLevel = parseInt(state.activeFilters.difficulty);
-        filtered = filtered.filter(c => c.difficulty === diffLevel);
+    // 分类过滤
+    if (state.activeCategory !== 'all') {
+        filtered = filtered.filter(c => c.category === state.activeCategory);
     }
 
     // 搜索过滤
@@ -752,14 +402,26 @@ function buildCaseCard(c, index) {
     const difficultyStars = buildDifficultyStars(c.difficulty);
     const recommendBar = buildRecommendBar(c.recommend);
     const sceneTags = c.scenes.map(s => `<span class="scene-tag">${s}</span>`).join('');
-    const screenshots = c.screenshots.map((ss, i) => `
-        <div class="screenshot" data-case-id="${c.id}" data-index="${i}"
-             onclick="openLightbox('${c.id}', ${i})">
-            <img src="${ss.src}" alt="${ss.alt}" loading="lazy"
-                 onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-tertiary);font-size:0.75rem\\'>📷 ${ss.alt}</div>'">
-            <div class="screenshot__overlay">🔍</div>
-        </div>
-    `).join('');
+
+    // 过滤掉占位 SVG 图片（搜不到真实截图的案例不显示图片区）
+    const realScreenshots = c.screenshots.filter(ss => !ss.src.endsWith('.svg'));
+
+    let screenshotsHtml;
+    if (realScreenshots.length > 0) {
+        screenshotsHtml = `<div class="case-card__screenshots">${realScreenshots.map((ss, i) => `
+            <div class="screenshot" data-case-id="${c.id}" data-index="${i}"
+                 onclick="openLightbox('${c.id}', ${i})">
+                <img src="${ss.src}" alt="${ss.alt}" loading="lazy"
+                     onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-tertiary);font-size:0.75rem;padding:0.5rem;text-align:center\\'>📷 暂无截图</div>'">
+                <div class="screenshot__overlay">🔍</div>
+            </div>
+        `).join('')}</div>`;
+    } else {
+        screenshotsHtml = `<div class="screenshots-empty">
+            <div class="screenshots-empty__icon">📷</div>
+            <p>该案例暂未收录截图</p>
+        </div>`;
+    }
 
     const featuresHtml = c.features.map(f => `<li>• ${f}</li>`).join('');
     const worthLearningHtml = c.worthLearning.map(w => `<li>• ${w}</li>`).join('');
@@ -776,8 +438,8 @@ function buildCaseCard(c, index) {
                     </p>
                 </div>
                 <div class="case-card__meta">
+                    <span class="case-card__badge case-card__badge--category">${c.categoryIcon} ${c.category}</span>
                     <span class="case-card__badge case-card__badge--format">${c.formatIcon} ${c.format}</span>
-                    <span class="case-card__badge case-card__badge--type">${c.typeIcon} ${c.type}</span>
                 </div>
             </div>
 
@@ -806,9 +468,7 @@ function buildCaseCard(c, index) {
                 </div>
             </div>
 
-            <div class="case-card__screenshots">
-                ${screenshots}
-            </div>
+            ${screenshotsHtml}
         </article>
     `;
 }
@@ -839,19 +499,20 @@ function buildRecommendBar(score) {
 // ========== 侧边栏导航 ==========
 function initSidebar() {
     buildSidebarNav(casesData);
+    initSidebarToggle();
 }
 
 function buildSidebarNav(cases) {
     if (!DOM.sidebarNav) return;
 
     DOM.sidebarNav.innerHTML = cases.map((c, i) => `
-        <a class="sidebar__nav-item" href="#${c.id}" data-case-id="${c.id}">
+        <a class="sidebar__nav-item" href="#${c.id}" data-case-id="${c.id}" title="${c.name}">
             <span class="sidebar__nav-num">${i + 1}</span>
             <span>${c.name.length > 18 ? c.name.substring(0, 16) + '…' : c.name}</span>
         </a>
     `).join('');
 
-    // 绑定点击事件
+    // 绑定点击事件：直接跳转到展厅案例卡片
     DOM.sidebarNav.querySelectorAll('.sidebar__nav-item').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
@@ -879,6 +540,40 @@ function updateSidebarNav(visibleCases) {
             item.style.display = 'none';
         }
     });
+}
+
+// ========== 桌面端侧栏折叠 ==========
+function initSidebarToggle() {
+    const toggleBtn = document.getElementById('sidebarToggle');
+    const footer = document.querySelector('.footer');
+    if (!toggleBtn || !DOM.sidebar) return;
+
+    // 恢复折叠状态
+    const savedCollapsed = localStorage.getItem('vr-sidebar-collapsed');
+    if (savedCollapsed === 'true') {
+        DOM.sidebar.classList.add('collapsed');
+        if (DOM.content) DOM.content.classList.add('sidebar-collapsed');
+        if (footer) footer.classList.add('sidebar-collapsed');
+        updateToggleIcon(true);
+    }
+
+    toggleBtn.addEventListener('click', () => {
+        const isCollapsed = DOM.sidebar.classList.toggle('collapsed');
+        if (DOM.content) DOM.content.classList.toggle('sidebar-collapsed', isCollapsed);
+        if (footer) footer.classList.toggle('sidebar-collapsed', isCollapsed);
+        localStorage.setItem('vr-sidebar-collapsed', isCollapsed);
+        updateToggleIcon(isCollapsed);
+
+        // 折叠后重新触发滚动高亮
+        setTimeout(highlightNavItem, 100);
+    });
+}
+
+function updateToggleIcon(isCollapsed) {
+    const icon = document.querySelector('.sidebar__toggle-icon');
+    if (icon) {
+        icon.textContent = isCollapsed ? '▶' : '◀';
+    }
 }
 
 // ========== 滚动效果 ==========
@@ -1040,16 +735,20 @@ function openLightbox(caseId, index) {
     const caseData = casesData.find(c => c.id === caseId);
     if (!caseData) return;
 
+    // 只使用非SVG的真实截图
+    const realScreenshots = caseData.screenshots.filter(ss => !ss.src.endsWith('.svg'));
+    if (realScreenshots.length === 0) return;
+
     state.currentLightboxCase = caseData;
     state.currentLightboxIndex = index;
 
     if (DOM.lightboxImg) {
-        DOM.lightboxImg.src = caseData.screenshots[index].src;
-        DOM.lightboxImg.alt = caseData.screenshots[index].alt;
+        DOM.lightboxImg.src = realScreenshots[index].src;
+        DOM.lightboxImg.alt = realScreenshots[index].alt;
     }
 
     if (DOM.lightboxCounter) {
-        DOM.lightboxCounter.textContent = `${index + 1} / ${caseData.screenshots.length}`;
+        DOM.lightboxCounter.textContent = `${index + 1} / ${realScreenshots.length}`;
     }
 
     if (DOM.lightbox) {
@@ -1070,21 +769,23 @@ function closeLightbox() {
 function navigateLightbox(direction) {
     if (!state.currentLightboxCase) return;
 
-    const screenshots = state.currentLightboxCase.screenshots;
+    const realScreenshots = state.currentLightboxCase.screenshots.filter(ss => !ss.src.endsWith('.svg'));
+    if (realScreenshots.length === 0) return;
+
     let newIndex = state.currentLightboxIndex + direction;
 
-    if (newIndex < 0) newIndex = screenshots.length - 1;
-    if (newIndex >= screenshots.length) newIndex = 0;
+    if (newIndex < 0) newIndex = realScreenshots.length - 1;
+    if (newIndex >= realScreenshots.length) newIndex = 0;
 
     state.currentLightboxIndex = newIndex;
 
     if (DOM.lightboxImg) {
-        DOM.lightboxImg.src = screenshots[newIndex].src;
-        DOM.lightboxImg.alt = screenshots[newIndex].alt;
+        DOM.lightboxImg.src = realScreenshots[newIndex].src;
+        DOM.lightboxImg.alt = realScreenshots[newIndex].alt;
     }
 
     if (DOM.lightboxCounter) {
-        DOM.lightboxCounter.textContent = `${newIndex + 1} / ${screenshots.length}`;
+        DOM.lightboxCounter.textContent = `${newIndex + 1} / ${realScreenshots.length}`;
     }
 }
 
@@ -1159,6 +860,7 @@ function renderComparisonTable() {
         return `
             <tr>
                 <td class="case-name-col">${c.name.length > 20 ? c.name.substring(0, 18) + '…' : c.name}</td>
+                <td>${c.category}</td>
                 <td>${c.type}</td>
                 <td>${formatShort}</td>
                 <td>${interactionType}</td>
