@@ -653,6 +653,17 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
         }
+        .btn-experience.btn-case-study {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .btn-experience.btn-case-study:hover {
+            background: var(--surface-hover);
+            border-color: var(--primary-light);
+            color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
         .btn-experience::after {
             content: '↗';
             font-size: 0.85rem;
@@ -879,50 +890,22 @@
         }
 
         /* ============================================================
-           页脚
+           底部
            ============================================================ */
         .footer {
-            padding: 60px 32px;
+            padding: 40px 32px;
             border-top: 1px solid var(--border);
             background: var(--surface);
             transition: background var(--transition-slow);
         }
-        .footer-inner {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-        }
-        .footer h5 {
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-        .footer a {
-            display: block;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            padding: 4px 0;
-            transition: color var(--transition);
-        }
-        .footer a:hover {
-            color: var(--primary);
-        }
         .footer-bottom {
             max-width: var(--max-width);
-            margin: 40px auto 0;
-            padding-top: 24px;
-            border-top: 1px solid var(--border-light);
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 12px;
             font-size: 0.85rem;
             color: var(--text-muted);
         }
@@ -1157,9 +1140,6 @@
                 margin-left: auto;
                 margin-right: auto;
             }
-            .footer-inner {
-                grid-template-columns: 1fr 1fr;
-            }
         }
 
         /* ============================================================
@@ -1233,9 +1213,6 @@
             }
             .recommend-card h2 {
                 font-size: 1.8rem;
-            }
-            .footer-inner {
-                grid-template-columns: 1fr;
             }
             .comparison-table thead th,
             .comparison-table tbody td {
@@ -1390,13 +1367,13 @@
             <!-- 平台卡片列表 -->
             <div class="platform-cards">
 
-                <!-- 平台一：北师大 -->
+                <!-- 平台一：星河 · 元宇宙引擎 -->
                 <div class="platform-card reveal">
                     <div class="platform-header">
                         <div class="platform-header-left">
-                            <div class="platform-logo">北</div>
+                            <div class="platform-logo">星</div>
                             <div>
-                                <div class="platform-name">星河元宇宙引擎</div>
+                                <div class="platform-name">星河 · 元宇宙引擎</div>
                                 <div style="font-size:0.85rem;color:var(--text-muted);">北师大图书馆教材展厅</div>
                             </div>
                         </div>
@@ -1425,7 +1402,6 @@
                                 <li>音频讲解丰富，自动触发</li>
                                 <li>交互玩法多样（任务+游戏）</li>
                                 <li>横竖屏均兼容，适配良好</li>
-                                <li>虚拟人物形象可定制</li>
                             </ul>
                         </div>
                         <div class="platform-col">
@@ -1471,8 +1447,8 @@
                             </div>
                         </div>
                         <div class="platform-rating">
-                            ★★☆☆☆
-                            <span class="platform-rating-num">2.3 / 5</span>
+                            ★★★☆☆
+                            <span class="platform-rating-num">3 / 5</span>
                         </div>
                     </div>
                     <div class="platform-body">
@@ -1485,17 +1461,16 @@
                                 <li>可设置全局背景音乐</li>
                                 <li>无小地图导航功能</li>
                                 <li>可自动播放展览内容（类似PPT自动播放）</li>
-                                <li>仅摇杆/键盘移动，不支持点击</li>
+                                <li>仅摇杆/键盘移动，不支持点击屏幕移动位置</li>
                             </ul>
                         </div>
                         <div class="platform-col">
                             <h5>✅ 优势</h5>
                             <ul>
-                                <li>免费模板，上手门槛极低</li>
+                                <li>免费模板，上手门槛低</li>
                                 <li>社交互动性强（表情+评论）</li>
                                 <li>制作流程简单快捷</li>
                                 <li>支持文字、图片、视频素材</li>
-                                <li>自动播放模式减少操作成本</li>
                             </ul>
                         </div>
                         <div class="platform-col">
@@ -1556,6 +1531,7 @@
                             <ul>
                                 <li>3D虚拟展厅，真实度较好</li>
                                 <li>虚拟人物可发表情包与评论</li>
+                                <li>可以设置固定讲解员与移动讲解员，设计好路线之后由讲解员带领参观者进行参观</li>
                                 <li>手机端横竖屏兼容</li>
                                 <li>摇杆 + 点击屏幕双重移动方式</li>
                                 <li>全局背景音乐支持</li>
@@ -1572,14 +1548,14 @@
                                 <li>横竖屏完美兼容，多端适配好</li>
                                 <li>免费模板可快速上手制作</li>
                                 <li>网页端访问，无需下载</li>
+                                <li>讲解系统比较仿真（案例：党建100周年 — 光辉的历程）</li>
                             </ul>
                         </div>
                         <div class="platform-col">
                             <h5>⚠️ 不足</h5>
                             <ul>
                                 <li>系统不稳定，经常无法进入展厅观看，多次尝试都无法打开制作展厅的界面，体验不稳定</li>
-                                <li>缺少AI智能问答功能</li>
-                                <li>音频讲解能力待提升</li>
+                                <li>有AI智能问答窗口，但无法正常使用，无法连接</li>
                             </ul>
                         </div>
                         <div class="platform-col">
@@ -1602,9 +1578,15 @@
                             <img src="images/image6.png" alt="视创云展 - 展厅截图2" loading="lazy">
                             <div class="zoom-icon">🔍</div>
                         </div>
+                        <div class="platform-screenshot" data-src="images/image7.png">
+                            <img src="images/image7.png" alt="视创云展 - 展厅截图3" loading="lazy">
+                            <div class="zoom-icon">🔍</div>
+                        </div>
                     </div>
-                    <div class="platform-footer">
+                    <div class="platform-footer" style="flex-wrap: wrap; gap: 12px;">
                         <a href="https://www.3dyunzhan.com/" target="_blank" rel="noopener" class="btn-experience">立即体验</a>
+                        <a href="https://obs.3dyunzhan.com/sceneFront/index.html?G_TEMP_ID=ef73e8053fad4115870d074143ce8abf" target="_blank" rel="noopener" class="btn-experience btn-case-study">案例：中国航天50周年 — 永远的东方红</a>
+                        <a href="https://meta.3dyunzhan.com/view.html?G_TEMP_ID=ecfd0e88265849989cf3d3b1f1088601" target="_blank" rel="noopener" class="btn-experience btn-case-study">案例：党建100周年 — 光辉的历程</a>
                     </div>
                 </div>
 
@@ -1626,7 +1608,7 @@
                     <thead>
                         <tr>
                             <th>评估指标</th>
-                            <th>北师大（星河元宇宙）</th>
+                            <th>星河 · 元宇宙引擎</th>
                             <th>元美名片</th>
                             <th>视创云展</th>
                         </tr>
@@ -1640,9 +1622,9 @@
                         </tr>
                         <tr>
                             <td><strong>沉浸体验</strong></td>
-                            <td class="stars best">★★★★★ <span class="best-badge">最佳</span></td>
+                            <td class="stars best">★★★★★</td>
                             <td class="stars">★★★★☆</td>
-                            <td class="stars">★★★★☆</td>
+                            <td class="stars best">★★★★★</td>
                         </tr>
                         <tr>
                             <td><strong>导航能力</strong></td>
@@ -1652,21 +1634,21 @@
                         </tr>
                         <tr>
                             <td><strong>移动端体验</strong></td>
-                            <td class="stars best">★★★★★ <span class="best-badge">最佳</span></td>
+                            <td class="stars best">★★★★★</td>
                             <td class="stars">★★☆☆☆</td>
-                            <td class="stars best">★★★★★ <span class="best-badge">最佳</span></td>
+                            <td class="stars best">★★★★★</td>
                         </tr>
                         <tr>
                             <td><strong>讲解功能</strong></td>
                             <td class="stars best">★★★★★ <span class="best-badge">最佳</span></td>
                             <td class="stars">★☆☆☆☆</td>
-                            <td class="stars">★★★☆☆</td>
+                            <td class="stars">★★★★☆</td>
                         </tr>
                         <tr>
-                            <td><strong>制作难度</strong></td>
-                            <td class="stars" style="color:#ef4444;">★☆☆☆☆ (需购买)</td>
-                            <td class="stars best">★★★★☆ <span class="best-badge">最佳</span></td>
-                            <td class="stars">★★★★☆</td>
+                            <td><strong>制作难度</strong><br><span style="font-size:0.7rem;color:var(--text-muted);font-weight:400;">（★越多越难）</span></td>
+                            <td class="stars" style="color:#ef4444;">★★★★★ (需购买)</td>
+                            <td class="stars best">★☆☆☆☆ <span class="best-badge">最佳</span></td>
+                            <td class="stars">★★★☆☆</td>
                         </tr>
                         <tr>
                             <td><strong>开放程度</strong></td>
@@ -1678,7 +1660,7 @@
                             <td><strong>综合推荐指数</strong></td>
                             <td class="stars">★★★★☆</td>
                             <td class="stars">★★★☆☆</td>
-                            <td class="stars" style="font-size:1.1rem;">★★★★☆ <span class="best-badge">推荐</span></td>
+                            <td class="stars" style="font-size:1.1rem;">★★★★★ <span class="best-badge">推荐</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -1696,9 +1678,9 @@
             <p class="section-subtitle reveal">结合《廉花郑放·赓续清风》项目的实际需求，对三个平台进行定性的适用性判断。</p>
 
             <div class="analysis-grid">
-                <!-- 北师大 -->
+                <!-- 星河 · 元宇宙引擎 -->
                 <div class="analysis-card reveal">
-                    <h4>北师大（星河元宇宙）</h4>
+                    <h4>星河 · 元宇宙引擎</h4>
                     <p class="analysis-subtitle">AI驱动 · 教育基因 · 高门槛</p>
                     <div class="analysis-section">
                         <h5>✅ 为什么适合</h5>
@@ -1733,8 +1715,8 @@
                         <p>视创云展在三个平台中提供了最佳的沉浸式体验——画面真实度较好、导航体系最完善（小地图点击跳转+场景导览+点击移动）、横竖屏完美兼容且支持多端访问。对于"廉花郑放·赓续清风"这样需要良好视觉呈现和流畅交互体验的线上档案展览，视创云展是最匹配的平台。免费模板机制也降低了初期投入成本。</p>
                     </div>
                     <div class="analysis-section">
-                        <h5>❌ 为什么不适合（及应对）</h5>
-                        <p>视创云展的主要短板在于讲解功能相对薄弱——缺少AI问答能力和自动音频讲解。但考虑到档案展览可以通过在展品旁嵌入文字说明和背景音乐来弥补，另外平台制作系统偶有不稳定的情况需要提前规划时间缓冲。</p>
+                        <h5>❌ 不适合</h5>
+                        <p>视创云展的主要短板在于讲解功能相对薄弱——缺少AI问答能力，另外平台制作系统偶有不稳定的情况。</p>
                     </div>
                 </div>
             </div>
@@ -1751,7 +1733,7 @@
             <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:8px;">推荐平台</p>
             <h2>视创云展</h2>
             <ul class="recommend-reasons">
-                <li>沉浸感好 — 3D画面真实度不错</li>
+                <li>沉浸感好 — 3D画面较真实 + 虚拟讲解员导览</li>
                 <li>导航体验最好 — 小地图点击跳转 + 场景导览 + 触屏移动</li>
                 <li>横竖屏兼容 — PC / 平板 / 手机完美适配</li>
                 <li>更符合纯线上虚拟档案展厅建设需求 — Web端独立访问，无需下载</li>
@@ -1763,28 +1745,10 @@
     </section>
 
     <!-- ============================================================
-    页脚
+    底部
     ============================================================ -->
     <footer class="footer">
-        <div class="footer-inner">
-            <div>
-                <h5>📎 参考资料</h5>
-                <a href="https://vr.chaoxing.com/#/showCustomerSpace?id=NjE4NjI" target="_blank" rel="noopener">北师大图书馆教材展厅（星河元宇宙引擎）</a>
-                <a href="https://y.fozmoly.com/xhs/" target="_blank" rel="noopener">元美名片虚拟展厅</a>
-                <a href="https://www.3dyunzhan.com/" target="_blank" rel="noopener">视创云展平台</a>
-            </div>
-            <div>
-                <h5>📋 项目信息</h5>
-                <p style="color:var(--text-secondary);font-size:0.9rem;line-height:2;">虚拟档案展厅建设平台调研</p>
-                <p style="color:var(--text-secondary);font-size:0.9rem;line-height:2;">基于《廉花郑放·赓续清风——红色廉洁文化档案展》</p>
-            </div>
-            <div>
-                <h5>📅 报告信息</h5>
-                <p style="color:var(--text-secondary);font-size:0.9rem;line-height:2;">生成日期：<span id="currentDate"></span></p>
-                <p style="color:var(--text-secondary);font-size:0.9rem;line-height:2;">格式：单页 HTML 网站</p>
-            </div>
-        </div>
-        <div class="footer-bottom" style="max-width:var(--max-width);margin:40px auto 0;">
+        <div class="footer-bottom">
             <span>© <span id="currentYear"></span> 虚拟档案展厅建设平台调研报告</span>
             <span>Powered by 纯原生 HTML + CSS + JavaScript</span>
         </div>
