@@ -1,264 +1,2090 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="国内优秀虚拟展厅案例调研 — 精选5个国内顶尖虚拟展厅案例，按平面网页叙事型、全景扫描型、3D建模交互型、数据库/档案检索型四大分类组织，提供深度分析与实践启示。">
-    <meta name="keywords" content="虚拟展厅,VR展厅,数字展览,博物馆数字化,陕西历史博物馆,故宫,线上展览">
-    <title>国内优秀虚拟展厅案例调研 | Virtual Exhibition Research</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230071e3'/><text x='16' y='22' text-anchor='middle' fill='white' font-size='18' font-weight='bold'>V</text></svg>">
+    <title>虚拟展厅建设平台调研</title>
+    <style>
+        /* ============================================================
+           CSS 变量 & 全局重置
+           ============================================================ */
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --primary-glow: rgba(37, 99, 235, 0.35);
+            --bg: #f8fafc;
+            --bg-alt: #f1f5f9;
+            --surface: #ffffff;
+            --surface-hover: #f8fafc;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --gold: #f59e0b;
+            --gold-light: #fbbf24;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.04);
+            --radius-sm: 10px;
+            --radius: 18px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --max-width: 1400px;
+            --nav-height: 64px;
+        }
+
+        /* 深色模式变量 */
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --bg-alt: #1e293b;
+            --surface: #1e293b;
+            --surface-hover: #273548;
+            --text: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border: #334155;
+            --border-light: #273548;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
+            --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: var(--nav-height);
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', 'HarmonyOS Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            transition: background var(--transition-slow), color var(--transition-slow);
+            overflow-x: hidden;
+        }
+
+        /* ============================================================
+           页面加载动画
+           ============================================================ */
+        #page-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        #page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ============================================================
+           滚动进度条
+           ============================================================ */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), #06b6d4);
+            z-index: 9999;
+            transition: width 0.1s linear;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* ============================================================
+           导航栏
+           ============================================================ */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: background var(--transition-slow), border var(--transition-slow), box-shadow var(--transition);
+        }
+        .nav.scrolled {
+            box-shadow: var(--shadow-lg);
+        }
+        .nav-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            width: 100%;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+        .nav-links {
+            display: flex;
+            gap: 6px;
+            list-style: none;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.08);
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 16px;
+        }
+
+        /* 深色模式切换 */
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            color: var(--text-secondary);
+        }
+        .theme-toggle:hover {
+            background: var(--surface-hover);
+            border-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* 打印按钮 */
+        .print-btn {
+            height: 40px;
+            padding: 0 16px;
+            border-radius: 20px;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        .print-btn:hover {
+            background: var(--surface-hover);
+            border-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* 移动端汉堡菜单 */
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: all var(--transition);
+        }
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text-secondary);
+            border-radius: 2px;
+            transition: all var(--transition);
+        }
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(4px, 4px);
+        }
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(4px, -4px);
+        }
+
+        /* ============================================================
+           通用布局
+           ============================================================ */
+        .section {
+            padding: 100px 32px;
+        }
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.08);
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        /* ============================================================
+           Hero 区域
+           ============================================================ */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 32px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 30%, #1a3a6b 60%, #0f172a 100%);
+        }
+        /* 网格背景 */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(59, 130, 246, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.06) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+        /* 光效 */
+        .hero-glow-1 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.2) 0%, transparent 70%);
+            top: -200px;
+            left: -100px;
+            animation: floatGlow 8s ease-in-out infinite;
+        }
+        .hero-glow-2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+            bottom: -150px;
+            right: -100px;
+            animation: floatGlow 10s ease-in-out infinite reverse;
+        }
+        @keyframes floatGlow {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+            50% { transform: translate(30px, -30px) scale(1.1); opacity: 1; }
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+            margin-bottom: 32px;
+            backdrop-filter: blur(10px);
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: #ffffff;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, #60a5fa, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-subtitle {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        .hero-desc {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            max-width: 640px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+        .hero-scroll {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+            animation: bounce 2s ease-in-out infinite;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+        .hero-scroll-icon {
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ============================================================
+           项目背景
+           ============================================================ */
+        .bg-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .bg-left h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+        .bg-left p {
+            color: var(--text-secondary);
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        .bg-right {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            text-align: center;
+            transition: all var(--transition);
+            cursor: default;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+        .stat-number.count-up {
+            transition: none;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           评价指标
+           ============================================================ */
+        .criteria-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+        .criterion-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 36px 20px;
+            text-align: center;
+            transition: all var(--transition);
+            cursor: default;
+        }
+        .criterion-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-light);
+        }
+        .criterion-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(6, 182, 212, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 2rem;
+            transition: all var(--transition);
+        }
+        .criterion-card:hover .criterion-icon {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(6, 182, 212, 0.2));
+            transform: scale(1.08);
+        }
+        .criterion-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .criterion-card p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+           平台详情卡片
+           ============================================================ */
+        .platform-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            margin-top: 48px;
+        }
+        .platform-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all var(--transition);
+        }
+        .platform-card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-3px);
+        }
+        .platform-header {
+            padding: 32px 36px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .platform-header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .platform-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+        .platform-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .platform-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--gold);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+        .platform-rating-num {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            letter-spacing: 0;
+            font-weight: 500;
+        }
+        .platform-body {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+        }
+        .platform-col {
+            padding: 28px 24px;
+            border-right: 1px solid var(--border-light);
+        }
+        .platform-col:last-child {
+            border-right: none;
+        }
+        .platform-col h5 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--primary);
+            margin-bottom: 14px;
+        }
+        .platform-col ul {
+            list-style: none;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.9;
+        }
+        .platform-col ul li {
+            position: relative;
+            padding-left: 16px;
+        }
+        .platform-col ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary-light);
+        }
+        .platform-footer {
+            padding: 20px 36px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+        }
+        .btn-experience {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 24px;
+            background: var(--primary);
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+        .btn-experience:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
+        }
+        .btn-experience::after {
+            content: '↗';
+            font-size: 0.85rem;
+        }
+
+        /* ============================================================
+           综合对比表格
+           ============================================================ */
+        .comparison-table-wrap {
+            overflow-x: auto;
+            margin-top: 48px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            background: var(--surface);
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+        .comparison-table thead th {
+            padding: 20px 24px;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+            background: var(--bg-alt);
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+        .comparison-table thead th:first-child {
+            border-radius: var(--radius-lg) 0 0 0;
+        }
+        .comparison-table thead th:last-child {
+            border-radius: 0 var(--radius-lg) 0 0;
+        }
+        .comparison-table tbody td {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .comparison-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .comparison-table tbody tr {
+            transition: background var(--transition);
+        }
+        .comparison-table tbody tr:hover {
+            background: var(--surface-hover);
+        }
+        .comparison-table .stars {
+            color: var(--gold);
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+        .comparison-table .best {
+            background: rgba(37, 99, 235, 0.06);
+            font-weight: 600;
+        }
+        .comparison-table .best-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 10px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        /* ============================================================
+           综合分析
+           ============================================================ */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            margin-top: 48px;
+        }
+        .analysis-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 36px 28px;
+            transition: all var(--transition);
+        }
+        .analysis-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+        .analysis-card.recommend {
+            border-color: var(--primary-light);
+            border-width: 2px;
+            position: relative;
+        }
+        .analysis-card.recommend::before {
+            content: '推荐';
+            position: absolute;
+            top: -1px;
+            right: 32px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 0 0 8px 8px;
+        }
+        .analysis-card h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        .analysis-card .analysis-subtitle {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .analysis-card .analysis-section {
+            margin-bottom: 16px;
+        }
+        .analysis-card .analysis-section h5 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .analysis-card .analysis-section p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* ============================================================
+           最终推荐
+           ============================================================ */
+        .recommend-section {
+            position: relative;
+            padding: 120px 32px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #1a3a6b 70%, #0f172a 100%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .recommend-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        .recommend-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, transparent 60%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: recommendGlow 3s ease-in-out infinite;
+        }
+        @keyframes recommendGlow {
+            0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+        }
+        .recommend-card {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-xl);
+            padding: 60px 48px;
+            text-align: center;
+            max-width: 640px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            animation: recommendBreath 3s ease-in-out infinite;
+        }
+        @keyframes recommendBreath {
+            0%, 100% { box-shadow: 0 0 40px rgba(37, 99, 235, 0.2); }
+            50% { box-shadow: 0 0 80px rgba(37, 99, 235, 0.4); }
+        }
+        .recommend-medal {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            animation: medalFloat 2s ease-in-out infinite;
+        }
+        @keyframes medalFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .recommend-card h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+        .recommend-reasons {
+            list-style: none;
+            text-align: left;
+            display: inline-block;
+            margin: 0 auto;
+        }
+        .recommend-reasons li {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.05rem;
+            padding: 10px 0;
+            padding-left: 28px;
+            position: relative;
+        }
+        .recommend-reasons li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #22d3ee;
+            font-weight: 700;
+        }
+
+        /* ============================================================
+           页脚
+           ============================================================ */
+        .footer {
+            padding: 60px 32px;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+            transition: background var(--transition-slow);
+        }
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+        .footer h5 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .footer a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 4px 0;
+            transition: color var(--transition);
+        }
+        .footer a:hover {
+            color: var(--primary);
+        }
+        .footer-bottom {
+            max-width: var(--max-width);
+            margin: 40px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+           平台截图展示
+           ============================================================ */
+        .platform-screenshots {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            padding: 0 36px 24px;
+        }
+        .platform-screenshot {
+            position: relative;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            transition: all var(--transition);
+            aspect-ratio: 16 / 9;
+            background: var(--bg-alt);
+        }
+        .platform-screenshot:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+        .platform-screenshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .platform-screenshot:hover img {
+            transform: scale(1.05);
+        }
+        .platform-screenshot .zoom-icon {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all var(--transition);
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+        }
+        .platform-screenshot:hover .zoom-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ============================================================
+           图片灯箱
+           ============================================================ */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 10001;
+            background: rgba(0, 0, 0, 0.92);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            cursor: pointer;
+        }
+        .lightbox.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .lightbox img {
+            max-width: 92vw;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            cursor: default;
+        }
+        .lightbox.open img {
+            transform: scale(1);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* ============================================================
+           返回顶部按钮
+           ============================================================ */
+        .back-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(16px);
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* ============================================================
+           滚动渐显动画
+           ============================================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================================
+           打印样式
+           ============================================================ */
+        @media print {
+            .nav, .back-to-top, #scroll-progress, #page-loader,
+            .theme-toggle, .print-btn, .menu-toggle, .hero-scroll,
+            .btn-experience, .nav-actions {
+                display: none !important;
+            }
+            .hero {
+                min-height: auto;
+                padding: 60px 32px;
+            }
+            .section {
+                padding: 40px 32px;
+            }
+            body {
+                font-size: 14px;
+                color: #000;
+            }
+            .platform-body {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .analysis-grid {
+                grid-template-columns: 1fr;
+            }
+            .recommend-card {
+                border: 2px solid #2563eb;
+                background: #f8fafc;
+            }
+            .recommend-card h2 {
+                color: #000;
+            }
+            .recommend-reasons li {
+                color: #333;
+            }
+            .platform-screenshots {
+                grid-template-columns: repeat(2, 1fr);
+                page-break-inside: avoid;
+            }
+            .platform-screenshot .zoom-icon,
+            .lightbox { display: none !important; }
+        }
+
+        /* ============================================================
+           响应式 - 平板
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .bg-section {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .criteria-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .platform-body {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .platform-col:nth-child(2) {
+                border-right: none;
+            }
+            .platform-screenshots {
+                padding: 0 24px 18px;
+            }
+            .analysis-grid {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .footer-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ============================================================
+           响应式 - 手机
+           ============================================================ */
+        @media (max-width: 640px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: var(--nav-height);
+                left: 0;
+                right: 0;
+                background: var(--surface);
+                flex-direction: column;
+                padding: 16px 24px;
+                border-bottom: 1px solid var(--border);
+                gap: 4px;
+                box-shadow: var(--shadow-lg);
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+            .section {
+                padding: 64px 20px;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .hero {
+                padding: 100px 20px;
+                min-height: auto;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .bg-right {
+                grid-template-columns: 1fr 1fr;
+            }
+            .criteria-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            .platform-body {
+                grid-template-columns: 1fr;
+            }
+            .platform-col {
+                border-right: none;
+                border-bottom: 1px solid var(--border-light);
+            }
+            .platform-col:last-child {
+                border-bottom: none;
+            }
+            .platform-header {
+                padding: 24px 20px;
+            }
+            .platform-footer {
+                padding: 16px 20px;
+            }
+            .platform-screenshots {
+                grid-template-columns: 1fr;
+                padding: 0 20px 16px;
+            }
+            .analysis-grid {
+                grid-template-columns: 1fr;
+            }
+            .recommend-card {
+                padding: 40px 24px;
+            }
+            .recommend-card h2 {
+                font-size: 1.8rem;
+            }
+            .footer-inner {
+                grid-template-columns: 1fr;
+            }
+            .comparison-table thead th,
+            .comparison-table tbody td {
+                padding: 12px 16px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- ==================== 加载动画 ==================== -->
-    <div class="loader" id="loader" aria-hidden="true">
-        <div class="loader__spinner"></div>
-        <p class="loader__text">正在加载案例数据…</p>
+    <!-- ============================================================
+    页面加载动画
+    ============================================================ -->
+    <div id="page-loader">
+        <div class="loader-spinner"></div>
     </div>
 
-    <!-- ==================== 顶部导航栏 ==================== -->
-    <header class="header" id="header">
-        <div class="header__title-group">
-            <div class="header__logo" aria-hidden="true">V</div>
-            <div>
-                <div class="header__title">虚拟展厅案例调研</div>
-                <div class="header__subtitle">Virtual Exhibition Research</div>
+    <!-- ============================================================
+    滚动进度条
+    ============================================================ -->
+    <div id="scroll-progress"></div>
+
+    <!-- ============================================================
+    导航栏
+    ============================================================ -->
+    <nav class="nav" id="navbar">
+        <div class="nav-inner">
+            <div class="nav-logo">📋 虚拟展厅建设平台调研</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#hero" data-section="hero">首页</a></li>
+                <li><a href="#background" data-section="background">项目背景</a></li>
+                <li><a href="#criteria" data-section="criteria">评价指标</a></li>
+                <li><a href="#platforms" data-section="platforms">平台介绍</a></li>
+                <li><a href="#comparison" data-section="comparison">综合对比</a></li>
+                <li><a href="#analysis" data-section="analysis">综合分析</a></li>
+                <li><a href="#recommend" data-section="recommend">最终推荐</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" title="切换深色模式" aria-label="切换深色模式">🌙</button>
+                <button class="print-btn" id="printBtn" title="打印 PDF">🖨️ 打印</button>
+                <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                    <span></span><span></span><span></span>
+                </button>
             </div>
         </div>
+    </nav>
 
-        <div class="header__actions">
-            <!-- 搜索框 -->
-            <div class="header__search">
-                <span class="header__search-icon" aria-hidden="true">🔍</span>
-                <input
-                    type="text"
-                    class="header__search-input"
-                    id="searchInput"
-                    placeholder="搜索案例名称、单位…"
-                    aria-label="搜索案例"
-                    autocomplete="off"
-                >
-            </div>
+    <!-- ============================================================
+    Hero 区域
+    ============================================================ -->
+    <section class="hero" id="hero">
+        <div class="hero-glow-1"></div>
+        <div class="hero-glow-2"></div>
+        <div class="hero-content">
 
-            <!-- 深色模式切换 -->
-            <button class="header__btn" id="themeToggle" title="切换深色/浅色模式" aria-label="切换深色模式">
-                🌙
-            </button>
-
-            <!-- 移动端菜单按钮 -->
-            <button class="mobile-nav-toggle" id="mobileNavToggle" title="打开导航菜单" aria-label="打开导航菜单">
-                ☰
-            </button>
+            <h1><span>虚拟展厅</span>建设平台调研报告</h1>
+            <p class="hero-subtitle">基于《廉花郑放·赓续清风——红色廉洁文化档案展》</p>
+            <p class="hero-desc">为建设线上虚拟展厅，对目前主流虚拟展厅平台进行了实际体验，并从展厅效果、交互方式、制作流程、平台开放性等多个维度进行综合分析。</p>
+            <a href="#background" class="hero-scroll">
+                <div class="hero-scroll-icon">↓</div>
+                开始阅读
+            </a>
         </div>
-    </header>
+    </section>
 
-    <!-- ==================== 主体布局 ==================== -->
-    <div class="main">
-
-        <!-- ========== 左侧导航栏 ========== -->
-        <aside class="sidebar" id="sidebar" aria-label="案例导航">
-            <!-- 折叠按钮（桌面端） -->
-            <button class="sidebar__toggle" id="sidebarToggle" title="折叠导航栏" aria-label="折叠导航栏">
-                <span class="sidebar__toggle-icon">◀</span>
-            </button>
-
-            <!-- 统计信息 -->
-            <div class="sidebar__stats" id="sidebarStats">
-                <!-- JS 动态填充 -->
-            </div>
-
-            <!-- 案例导航列表 -->
-            <div class="sidebar__nav-title">案例导航</div>
-            <nav class="sidebar__nav" id="sidebarNav">
-                <!-- JS 动态填充 -->
-            </nav>
-        </aside>
-
-        <!-- 侧栏遮罩（移动端） -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-        <!-- ========== 右侧内容区 ========== -->
-        <main class="content" id="content">
-
-            <!-- ===== Hero 标题区 ===== -->
-            <section class="hero">
-                <span class="hero__label">调研成果展示</span>
-                <h1 class="hero__title">国内优秀虚拟展厅案例调研</h1>
-                <p class="hero__subtitle">Virtual Exhibition Hall Research</p>
-                <p class="hero__desc">
-                    精选国内5个优秀虚拟展厅案例，按平面网页叙事型、全景扫描型、3D建模交互型、
-                    数据库/档案检索型四大分类组织，从展示形式、技术实现、内容组织、
-                    交互设计等维度进行深度分析与横向比较，提炼优秀实践启示，为数字展览建设提供参考。
-                </p>
-            </section>
-
-            <!-- ===== 统计卡片行 ===== -->
-            <section class="stats-row" aria-label="数据概览">
-                <article class="stat-card">
-                    <div class="stat-card__icon">📊</div>
-                    <div class="stat-card__number" id="statTotal">0</div>
-                    <div class="stat-card__label">案例总数</div>
-                </article>
-                <article class="stat-card">
-                    <div class="stat-card__icon">🌐</div>
-                    <div class="stat-card__number" id="statCat1">0</div>
-                    <div class="stat-card__label">平面网页叙事型</div>
-                </article>
-                <article class="stat-card">
-                    <div class="stat-card__icon">🥽</div>
-                    <div class="stat-card__number" id="statCat2">0</div>
-                    <div class="stat-card__label">全景扫描型</div>
-                </article>
-                <article class="stat-card">
-                    <div class="stat-card__icon">📦</div>
-                    <div class="stat-card__number" id="statCat3">0</div>
-                    <div class="stat-card__label">3D建模交互型</div>
-                </article>
-                <article class="stat-card">
-                    <div class="stat-card__icon">🗄️</div>
-                    <div class="stat-card__number" id="statCat4">0</div>
-                    <div class="stat-card__label">数据库/档案检索型</div>
-                </article>
-            </section>
-
-            <!-- ===== 筛选栏 ===== -->
-            <section class="filter-bar" id="filterCategory" aria-label="按案例分类筛选">
-                <span class="filter-bar__label">案例分类</span>
-                <button class="filter-bar__tag active" data-filter="all">全部</button>
-                <button class="filter-bar__tag" data-filter="平面网页叙事型">🌐 平面网页叙事型</button>
-                <button class="filter-bar__tag" data-filter="全景扫描型">🥽 全景扫描型</button>
-                <button class="filter-bar__tag" data-filter="3D建模交互型">📦 3D建模交互型</button>
-                <button class="filter-bar__tag" data-filter="数据库/档案检索型">🗄️ 数据库/档案检索型</button>
-            </section>
-
-            <!-- ===== 案例卡片列表 ===== -->
-            <section class="cases-section" id="casesSection" aria-label="案例详情列表">
-                <h2 class="section-title">案例详情</h2>
-                <p class="section-subtitle">点击左侧导航或滚动浏览全部案例 · 点击截图可放大查看</p>
-
-                <div class="cases-grid" id="casesGrid">
-                    <!-- JS 动态填充 -->
+    <!-- ============================================================
+    项目背景
+    ============================================================ -->
+    <section class="section" id="background">
+        <div class="container">
+            <span class="section-label">项目背景</span>
+            <div class="bg-section">
+                <div class="bg-left reveal">
+                    <h3>项目简介</h3>
+                    <p>「廉花郑放·赓续清风——红色廉洁文化档案展」是一项以廉洁文化为主题的红色档案展览项目，以河南红色精神谱系为叙事主线，重点打造 “人物 · 制度 · 郑大 · 传承 ” 四大板块，系统呈现红色精神中的廉政基因与新时代传承。为实现线上虚拟展厅的建设目标，对当前市场上主流的虚拟展厅平台进行了系统性调研。本次调研覆盖了三个具有代表性的平台，从展厅渲染效果、用户交互体验、移动端适配能力、语音讲解功能、内容制作流程以及平台开放程度六个核心维度进行了深度评估，旨在为项目选择最合适的虚拟展厅建设方案。</p>
                 </div>
-
-                <!-- 无结果提示 -->
-                <div class="no-results" id="noResults">
-                    <div class="no-results__icon">🔍</div>
-                    <p class="no-results__text">未找到匹配的案例，请尝试调整筛选条件或搜索关键词</p>
-                </div>
-            </section>
-
-            <!-- ===== 优秀实践总结 ===== -->
-            <section class="summary-section" aria-label="优秀实践总结">
-                <h2 class="section-title">优秀实践总结与启示</h2>
-                <p class="section-subtitle">归纳国内虚拟展厅设计的共同特点，提炼可复用的设计方法论</p>
-
-                <div class="summary-card">
-                    <div class="summary-card__grid">
-                        <!-- 启示 1：四大分类与适用梯度 -->
-                        <article class="summary-insight">
-                            <div class="summary-insight__icon">🎯</div>
-                            <h3 class="summary-insight__title">四大分类与适用梯度</h3>
-                            <p class="summary-insight__text">
-                                5个案例恰好覆盖了虚拟展厅的四大类型：平面网页叙事型（陕西历史博物馆官网、大运河石刻文化）
-                                适合以内容阅读为主的专题展览，开发成本低、适用面广；全景扫描型（南京博物院VR）
-                                适合实体场馆的线上复制，沉浸感强；3D建模交互型（河南档案馆中福公司3D展厅）
-                                适合需要空间探索感的展览，交互自由度最高；
-                                数据库/档案检索型（故宫数字文物库）适合大规模藏品的系统化检索与学术研究。
-                                对本项目的启示：根据展览目标选择最匹配的类型，而非一味追求技术复杂度。
-                            </p>
-                        </article>
-
-                        <!-- 启示 2：内容叙事驱动技术选择 -->
-                        <article class="summary-insight">
-                            <div class="summary-insight__icon">📝</div>
-                            <h3 class="summary-insight__title">内容叙事驱动技术选择</h3>
-                            <p class="summary-insight__text">
-                                大运河石刻文化线上展厅以"沿运河水系逐段探索"的线性叙事为骨架，
-                                陕西历史博物馆官网以"周秦汉唐"文化脉络组织首页叙事——
-                                这两个案例证明，优秀的虚拟展览总是先有清晰的叙事线索，再选择与之匹配的技术方案。
-                                "以内容深度驱动技术深度"远比"技术堆砌+内容空洞"更有感染力。
-                                对本项目的启示：策展阶段就要明确核心叙事线索，技术方案服务于叙事目标。
-                            </p>
-                        </article>
-
-                        <!-- 启示 3：平台化建设与持续迭代 -->
-                        <article class="summary-insight">
-                            <div class="summary-insight__icon">🏗️</div>
-                            <h3 class="summary-insight__title">平台化建设与持续迭代</h3>
-                            <p class="summary-insight__text">
-                                故宫数字文物库是"长期主义"的典范——186万余件藏品持续收录、元数据标准不断迭代，
-                                从最初的基础检索到如今的高清像素级放大，体现了"不追求一次性项目交付，
-                                而是建设可生长、可复用的数字基础设施"的理念。
-                                对本项目的启示：初期架构设计应预留扩展接口，避免"一次性项目"思维。
-                            </p>
-                        </article>
-
-                        <!-- 启示 4：多端适配与分层体验 -->
-                        <article class="summary-insight">
-                            <div class="summary-insight__icon">📱</div>
-                            <h3 class="summary-insight__title">多端适配与分层体验</h3>
-                            <p class="summary-insight__text">
-                                陕西历史博物馆官网的响应式布局在PC端与移动端均有出色表现；
-                                河南档案馆3D展厅以WebGL技术实现跨平台3D浏览，无需安装插件或APP；
-                                故宫数字文物库兼容PC深度检索与移动端快速浏览两种使用场景。
-                                对本项目的启示：至少应实现PC端+移动端的响应式适配，覆盖最广泛的用户群体。
-                            </p>
-                        </article>
-
-                        <!-- 启示 5：设计美学与品牌一致性 -->
-                        <article class="summary-insight">
-                            <div class="summary-insight__icon">🎨</div>
-                            <h3 class="summary-insight__title">设计美学与品牌一致性</h3>
-                            <p class="summary-insight__text">
-                                陕西历史博物馆的唐风美学与现代极简融合、大运河石刻文化的留白与排版节奏、
-                                南京博物院VR的展馆氛围还原——优秀案例普遍在视觉设计上做到了
-                                "内容调性—机构品牌—数字体验"三者的高度统一。
-                                对本项目的启示：数字展览不是孤立的技术项目，而是机构品牌在数字空间的延伸，
-                                视觉设计应深度呼应内容的文化质感。
-                            </p>
-                        </article>
-
-                        <!-- 启示 6：从平面到3D的技术升级路径 -->
-                        <article class="summary-insight">
-                            <div class="summary-insight__icon">📦</div>
-                            <h3 class="summary-insight__title">从平面到3D的技术升级路径</h3>
-                            <p class="summary-insight__text">
-                                河南省档案馆的案例体现了从平面网页叙事到3D建模交互的典型升级路径：
-                                以同一批档案内容为基础，从"图文浏览"升级为"空间漫游"，显著提升了用户的
-                                探索自由度和沉浸感，同时保持了开发成本和维护难度的可控性。
-                                对本项目的启示：技术升级不必一步到位，可在已有内容基础上渐进式提升交互维度。
-                            </p>
-                        </article>
+                <div class="bg-right">
+                    <div class="stat-card reveal">
+                        <div class="stat-number" data-target="3">0</div>
+                        <div class="stat-label">调研平台数量</div>
+                    </div>
+                    <div class="stat-card reveal">
+                        <div class="stat-number">电脑<span style="font-size:1.2rem;color:var(--text-muted);">+</span>手机</div>
+                        <div class="stat-label">体验设备</div>
+                    </div>
+                    <div class="stat-card reveal">
+                        <div class="stat-number" data-target="6">0</div>
+                        <div class="stat-label">评价维度</div>
+                    </div>
+                    <div class="stat-card reveal">
+                        <div class="stat-number" style="font-size:1.5rem;line-height:2.5rem;">视创云展</div>
+                        <div class="stat-label">最终推荐</div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
+    </section>
 
-        </main>
-    </div>
+    <!-- ============================================================
+    评价指标
+    ============================================================ -->
+    <section class="section" id="criteria" style="background: var(--bg-alt);">
+        <div class="container">
+            <span class="section-label">评价指标</span>
+            <h2 class="section-title reveal">六大核心评估维度</h2>
+            <p class="section-subtitle reveal">从多角度对每个平台进行系统性评估，确保推荐方案全面满足虚拟档案展厅的建设需求。</p>
+            <div class="criteria-grid">
+                <div class="criterion-card reveal">
+                    <div class="criterion-icon">🎨</div>
+                    <h4>展厅效果</h4>
+                    <p>3D渲染质量与视觉真实感</p>
+                </div>
+                <div class="criterion-card reveal">
+                    <div class="criterion-icon">🧭</div>
+                    <h4>交互体验</h4>
+                    <p>导航方式与游览流畅度</p>
+                </div>
+                <div class="criterion-card reveal">
+                    <div class="criterion-icon">📱</div>
+                    <h4>移动端适配</h4>
+                    <p>横竖屏兼容与触控操作</p>
+                </div>
+                <div class="criterion-card reveal">
+                    <div class="criterion-icon">🔊</div>
+                    <h4>讲解能力</h4>
+                    <p>音频导览与智能问答</p>
+                </div>
+                <div class="criterion-card reveal">
+                    <div class="criterion-icon">🛠</div>
+                    <h4>制作便捷性</h4>
+                    <p>模板丰富度与编辑门槛</p>
+                </div>
+                <div class="criterion-card reveal">
+                    <div class="criterion-icon">📦</div>
+                    <h4>开放程度</h4>
+                    <p>平台开放性与数据自主权</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- ==================== 页脚 ==================== -->
+    <!-- ============================================================
+    平台介绍
+    ============================================================ -->
+    <section class="section" id="platforms">
+        <div class="container">
+            <span class="section-label">平台详情</span>
+            <h2 class="section-title reveal">三大平台深度体验</h2>
+            <p class="section-subtitle reveal">每个平台均经过实际注册、展厅漫游、功能测试，以下是详细的体验报告。</p>
+
+            <!-- 平台卡片列表 -->
+            <div class="platform-cards">
+
+                <!-- 平台一：北师大 -->
+                <div class="platform-card reveal">
+                    <div class="platform-header">
+                        <div class="platform-header-left">
+                            <div class="platform-logo">北</div>
+                            <div>
+                                <div class="platform-name">星河元宇宙引擎</div>
+                                <div style="font-size:0.85rem;color:var(--text-muted);">北师大图书馆教材展厅</div>
+                            </div>
+                        </div>
+                        <div class="platform-rating">
+                            ★★★★☆
+                            <span class="platform-rating-num">4 / 5</span>
+                        </div>
+                    </div>
+                    <div class="platform-body">
+                        <div class="platform-col">
+                            <h5>🎨 展厅效果</h5>
+                            <ul>
+                                <li>3D虚拟展厅，真实度较好</li>
+                                <li>虚拟人物可更换形象或关闭</li>
+                                <li>接入AI大模型，实时问答</li>
+                                <li>每展区自动播放音频讲解</li>
+                                <li>有小地图全览（不可点击跳转）</li>
+                                <li>场景导览可快速跳转位置</li>
+                                <li>可设置小任务与游戏增强互动</li>
+                            </ul>
+                        </div>
+                        <div class="platform-col">
+                            <h5>✅ 优势</h5>
+                            <ul>
+                                <li>AI大模型加持，智能化程度高</li>
+                                <li>音频讲解丰富，自动触发</li>
+                                <li>交互玩法多样（任务+游戏）</li>
+                                <li>横竖屏均兼容，适配良好</li>
+                                <li>虚拟人物形象可定制</li>
+                            </ul>
+                        </div>
+                        <div class="platform-col">
+                            <h5>⚠️ 不足</h5>
+                            <ul>
+                                <li>小地图无法点击跳转位置</li>
+                                <li>需学校购买才能使用</li>
+                            </ul>
+                        </div>
+                        <div class="platform-col">
+                            <h5>🎯 适用场景</h5>
+                            <ul>
+                                <li>高校 / 教育机构内部展览</li>
+                                <li>已有采购预算的正式项目</li>
+                                <li>需要AI互动与任务系统的展览</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- 截图 -->
+                    <div class="platform-screenshots">
+                        <div class="platform-screenshot" data-src="images/image1.png">
+                            <img src="images/image1.png" alt="星河元宇宙引擎 - 展厅截图1" loading="lazy">
+                            <div class="zoom-icon">🔍</div>
+                        </div>
+                        <div class="platform-screenshot" data-src="images/image2.png">
+                            <img src="images/image2.png" alt="星河元宇宙引擎 - 展厅截图2" loading="lazy">
+                            <div class="zoom-icon">🔍</div>
+                        </div>
+                    </div>
+                    <div class="platform-footer">
+                        <a href="https://vr.chaoxing.com/#/showCustomerSpace?id=NjE4NjI" target="_blank" rel="noopener" class="btn-experience">立即体验</a>
+                    </div>
+                </div>
+
+                <!-- 平台二：元美名片 -->
+                <div class="platform-card reveal">
+                    <div class="platform-header">
+                        <div class="platform-header-left">
+                            <div class="platform-logo">元</div>
+                            <div>
+                                <div class="platform-name">元美名片</div>
+                                <div style="font-size:0.85rem;color:var(--text-muted);">微信小程序平台</div>
+                            </div>
+                        </div>
+                        <div class="platform-rating">
+                            ★★☆☆☆
+                            <span class="platform-rating-num">2.3 / 5</span>
+                        </div>
+                    </div>
+                    <div class="platform-body">
+                        <div class="platform-col">
+                            <h5>🎨 展厅效果</h5>
+                            <ul>
+                                <li>3D虚拟展厅，真实度一般</li>
+                                <li>虚拟人物可发送表情包与评论</li>
+                                <li>仅支持小程序打开，无法横屏</li>
+                                <li>可设置全局背景音乐</li>
+                                <li>无小地图导航功能</li>
+                                <li>可自动播放展览内容（类似PPT自动播放）</li>
+                                <li>仅摇杆/键盘移动，不支持点击</li>
+                            </ul>
+                        </div>
+                        <div class="platform-col">
+                            <h5>✅ 优势</h5>
+                            <ul>
+                                <li>免费模板，上手门槛极低</li>
+                                <li>社交互动性强（表情+评论）</li>
+                                <li>制作流程简单快捷</li>
+                                <li>支持文字、图片、视频素材</li>
+                                <li>自动播放模式减少操作成本</li>
+                            </ul>
+                        </div>
+                        <div class="platform-col">
+                            <h5>⚠️ 不足</h5>
+                            <ul>
+                                <li>仅限小程序，无法Web端访问</li>
+                                <li>只能竖屏，横屏体验缺失</li>
+                                <li>无小地图，空间定位困难</li>
+                                <li>无法添加音频，无法实现语音讲解</li>
+                                <li>导航方式单一，操作受限</li>
+                                <li>仅摇杆移动，体验差</li>
+                            </ul>
+                        </div>
+                        <div class="platform-col">
+                            <h5>🎯 适用场景</h5>
+                            <ul>
+                                <li>微信生态内的轻量级展览</li>
+                                <li>社交分享导向的名片型展示</li>
+                                <li>对讲解功能无要求的项目</li>
+                                <li>快速搭建、短期上线的需求</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- 截图 -->
+                    <div class="platform-screenshots">
+                        <div class="platform-screenshot" data-src="images/image3.jpeg">
+                            <img src="images/image3.jpeg" alt="元美名片 - 展厅截图1" loading="lazy">
+                            <div class="zoom-icon">🔍</div>
+                        </div>
+                        <div class="platform-screenshot" data-src="images/image4.png">
+                            <img src="images/image4.png" alt="元美名片 - 展厅截图2" loading="lazy">
+                            <div class="zoom-icon">🔍</div>
+                        </div>
+                    </div>
+                    <div class="platform-footer">
+                        <a href="https://y.fozmoly.com/xhs/" target="_blank" rel="noopener" class="btn-experience">立即体验</a>
+                    </div>
+                </div>
+
+                <!-- 平台三：视创云展 -->
+                <div class="platform-card reveal" style="border-color: var(--primary-light); border-width: 2px;">
+                    <div class="platform-header" style="background: linear-gradient(135deg, rgba(37,99,235,0.03), rgba(6,182,212,0.03));">
+                        <div class="platform-header-left">
+                            <div class="platform-logo" style="background:linear-gradient(135deg, #2563eb, #06b6d4); color:#fff;">视</div>
+                            <div>
+                                <div class="platform-name">视创云展</div>
+                                <div style="font-size:0.85rem;color:var(--primary);font-weight:600;">🏆 最终推荐平台</div>
+                            </div>
+                        </div>
+                        <div class="platform-rating">
+                            ★★★★☆
+                            <span class="platform-rating-num">4 / 5</span>
+                        </div>
+                    </div>
+                    <div class="platform-body">
+                        <div class="platform-col">
+                            <h5>🎨 展厅效果</h5>
+                            <ul>
+                                <li>3D虚拟展厅，真实度较好</li>
+                                <li>虚拟人物可发表情包与评论</li>
+                                <li>手机端横竖屏兼容</li>
+                                <li>摇杆 + 点击屏幕双重移动方式</li>
+                                <li>全局背景音乐支持</li>
+                                <li>小地图可点击跳转位置</li>
+                                <li>场景导览快速切换</li>
+                                <li>视角丰富，自由度较高</li>
+                            </ul>
+                        </div>
+                        <div class="platform-col">
+                            <h5>✅ 优势</h5>
+                            <ul>
+                                <li>画面真实度为三平台最佳</li>
+                                <li>导航体验最完善（地图+导览+三维+鸟瞰）</li>
+                                <li>横竖屏完美兼容，多端适配好</li>
+                                <li>免费模板可快速上手制作</li>
+                                <li>网页端访问，无需下载</li>
+                            </ul>
+                        </div>
+                        <div class="platform-col">
+                            <h5>⚠️ 不足</h5>
+                            <ul>
+                                <li>系统不稳定，经常无法进入展厅观看，多次尝试都无法打开制作展厅的界面，体验不稳定</li>
+                                <li>缺少AI智能问答功能</li>
+                                <li>音频讲解能力待提升</li>
+                            </ul>
+                        </div>
+                        <div class="platform-col">
+                            <h5>🎯 适用场景</h5>
+                            <ul>
+                                <li>线上虚拟档案展厅建设</li>
+                                <li>需要良好导航体验的展览</li>
+                                <li>多端兼容的Web端3D展示</li>
+                                <li>追求沉浸感与真实度的项目</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- 截图 -->
+                    <div class="platform-screenshots">
+                        <div class="platform-screenshot" data-src="images/image5.png">
+                            <img src="images/image5.png" alt="视创云展 - 展厅截图1" loading="lazy">
+                            <div class="zoom-icon">🔍</div>
+                        </div>
+                        <div class="platform-screenshot" data-src="images/image6.png">
+                            <img src="images/image6.png" alt="视创云展 - 展厅截图2" loading="lazy">
+                            <div class="zoom-icon">🔍</div>
+                        </div>
+                    </div>
+                    <div class="platform-footer">
+                        <a href="https://www.3dyunzhan.com/" target="_blank" rel="noopener" class="btn-experience">立即体验</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    综合对比
+    ============================================================ -->
+    <section class="section" id="comparison" style="background: var(--bg-alt);">
+        <div class="container">
+            <span class="section-label">综合对比</span>
+            <h2 class="section-title reveal">全维度横向对比</h2>
+            <p class="section-subtitle reveal">基于实际体验数据，从七个维度对三个平台进行客观评分对比。</p>
+
+            <div class="comparison-table-wrap reveal">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>评估指标</th>
+                            <th>北师大（星河元宇宙）</th>
+                            <th>元美名片</th>
+                            <th>视创云展</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>画面真实度</strong></td>
+                            <td class="stars best">★★★★☆</td>
+                            <td class="stars">★★★☆☆</td>
+                            <td class="stars best">★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td><strong>沉浸体验</strong></td>
+                            <td class="stars best">★★★★★ <span class="best-badge">最佳</span></td>
+                            <td class="stars">★★★★☆</td>
+                            <td class="stars">★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td><strong>导航能力</strong></td>
+                            <td class="stars">★★★★☆</td>
+                            <td class="stars">★★☆☆☆</td>
+                            <td class="stars best">★★★★★ <span class="best-badge">最佳</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>移动端体验</strong></td>
+                            <td class="stars best">★★★★★ <span class="best-badge">最佳</span></td>
+                            <td class="stars">★★☆☆☆</td>
+                            <td class="stars best">★★★★★ <span class="best-badge">最佳</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>讲解功能</strong></td>
+                            <td class="stars best">★★★★★ <span class="best-badge">最佳</span></td>
+                            <td class="stars">★☆☆☆☆</td>
+                            <td class="stars">★★★☆☆</td>
+                        </tr>
+                        <tr>
+                            <td><strong>制作难度</strong></td>
+                            <td class="stars" style="color:#ef4444;">★☆☆☆☆ (需购买)</td>
+                            <td class="stars best">★★★★☆ <span class="best-badge">最佳</span></td>
+                            <td class="stars">★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td><strong>开放程度</strong></td>
+                            <td class="stars">★★☆☆☆</td>
+                            <td class="stars">★★★☆☆</td>
+                            <td class="stars best">★★★★☆ <span class="best-badge">最佳</span></td>
+                        </tr>
+                        <tr style="background: rgba(37,99,235,0.04);">
+                            <td><strong>综合推荐指数</strong></td>
+                            <td class="stars">★★★★☆</td>
+                            <td class="stars">★★★☆☆</td>
+                            <td class="stars" style="font-size:1.1rem;">★★★★☆ <span class="best-badge">推荐</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    综合分析
+    ============================================================ -->
+    <section class="section" id="analysis">
+        <div class="container">
+            <span class="section-label">综合分析</span>
+            <h2 class="section-title reveal">平台适用性深度分析</h2>
+            <p class="section-subtitle reveal">结合《廉花郑放·赓续清风》项目的实际需求，对三个平台进行定性的适用性判断。</p>
+
+            <div class="analysis-grid">
+                <!-- 北师大 -->
+                <div class="analysis-card reveal">
+                    <h4>北师大（星河元宇宙）</h4>
+                    <p class="analysis-subtitle">AI驱动 · 教育基因 · 高门槛</p>
+                    <div class="analysis-section">
+                        <h5>✅ 为什么适合</h5>
+                        <p>该平台最大的亮点在于AI大模型集成和丰富的音频讲解体系，对于档案展览这种需要知识传播的场景天然契合。虚拟人物形象可定制、展区自动讲解、任务系统等教育基因使得它非常适合知识型展览。如果采购问题能够解决，它将是功能最全面的选择。</p>
+                    </div>
+                    <div class="analysis-section">
+                        <h5>❌ 为什么不适合</h5>
+                        <p>核心障碍在于需要学校层面采购方可使用。作为第三方项目团队无法自主搭建展厅内容，这从根本上限制了该平台的可用性。</p>
+                    </div>
+                </div>
+
+                <!-- 元美名片 -->
+                <div class="analysis-card reveal">
+                    <h4>元美名片</h4>
+                    <p class="analysis-subtitle">轻量便捷 · 社交属性 · 局限性大</p>
+                    <div class="analysis-section">
+                        <h5>✅ 为什么适合</h5>
+                        <p>元美名片的最大优势在于极低的制作门槛——免费模板配合简单的素材添加即可快速生成展厅。如果项目需求是轻量级的名片式展示，追求快速上线和社交传播（微信生态内），它是一个不错的选择。社交互动功能（表情包、评论）也为展览增添了趣味性。</p>
+                    </div>
+                    <div class="analysis-section">
+                        <h5>❌ 为什么不适合</h5>
+                        <p>该平台的存在诸多硬伤：仅限微信小程序访问，无法提供独立的Web端体验；强制竖屏且无横屏模式，在平板和桌面端体验极差；完全无法添加音频讲解，这对档案展览是致命缺陷；缺少小地图导致大型展厅的空间迷失感强烈。这些限制使其无法胜任正式的虚拟档案展厅建设。</p>
+                    </div>
+                </div>
+
+                <!-- 视创云展 -->
+                <div class="analysis-card reveal recommend">
+                    <h4>视创云展</h4>
+                    <p class="analysis-subtitle">🏆 综合体验最佳 · 全场景适配</p>
+                    <div class="analysis-section">
+                        <h5>✅ 为什么适合</h5>
+                        <p>视创云展在三个平台中提供了最佳的沉浸式体验——画面真实度较好、导航体系最完善（小地图点击跳转+场景导览+点击移动）、横竖屏完美兼容且支持多端访问。对于"廉花郑放·赓续清风"这样需要良好视觉呈现和流畅交互体验的线上档案展览，视创云展是最匹配的平台。免费模板机制也降低了初期投入成本。</p>
+                    </div>
+                    <div class="analysis-section">
+                        <h5>❌ 为什么不适合（及应对）</h5>
+                        <p>视创云展的主要短板在于讲解功能相对薄弱——缺少AI问答能力和自动音频讲解。但考虑到档案展览可以通过在展品旁嵌入文字说明和背景音乐来弥补，另外平台制作系统偶有不稳定的情况需要提前规划时间缓冲。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    最终推荐
+    ============================================================ -->
+    <section class="recommend-section" id="recommend">
+        <div class="recommend-glow"></div>
+        <div class="recommend-card reveal">
+            <div class="recommend-medal">🥇</div>
+            <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:8px;">推荐平台</p>
+            <h2>视创云展</h2>
+            <ul class="recommend-reasons">
+                <li>沉浸感好 — 3D画面真实度不错</li>
+                <li>导航体验最好 — 小地图点击跳转 + 场景导览 + 触屏移动</li>
+                <li>横竖屏兼容 — PC / 平板 / 手机完美适配</li>
+                <li>更符合纯线上虚拟档案展厅建设需求 — Web端独立访问，无需下载</li>
+            </ul>
+            <div style="margin-top:32px;">
+                <a href="https://www.3dyunzhan.com/" target="_blank" rel="noopener" class="btn-experience" style="font-size:1rem;padding:14px 36px;">立即体验视创云展</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    页脚
+    ============================================================ -->
     <footer class="footer">
-        <span>© 2026 国内优秀虚拟展厅案例调研 · 仅供学习研究参考</span>
-        <div class="footer__stats">
-            <span class="footer__stat">📊 共 <strong id="caseCount">0</strong> 个案例</span>
-            <span class="footer__stat">📅 更新于 2026年7月</span>
+        <div class="footer-inner">
+            <div>
+                <h5>📎 参考资料</h5>
+                <a href="https://vr.chaoxing.com/#/showCustomerSpace?id=NjE4NjI" target="_blank" rel="noopener">北师大图书馆教材展厅（星河元宇宙引擎）</a>
+                <a href="https://y.fozmoly.com/xhs/" target="_blank" rel="noopener">元美名片虚拟展厅</a>
+                <a href="https://www.3dyunzhan.com/" target="_blank" rel="noopener">视创云展平台</a>
+            </div>
+            <div>
+                <h5>📋 项目信息</h5>
+                <p style="color:var(--text-secondary);font-size:0.9rem;line-height:2;">虚拟档案展厅建设平台调研</p>
+                <p style="color:var(--text-secondary);font-size:0.9rem;line-height:2;">基于《廉花郑放·赓续清风——红色廉洁文化档案展》</p>
+            </div>
+            <div>
+                <h5>📅 报告信息</h5>
+                <p style="color:var(--text-secondary);font-size:0.9rem;line-height:2;">生成日期：<span id="currentDate"></span></p>
+                <p style="color:var(--text-secondary);font-size:0.9rem;line-height:2;">格式：单页 HTML 网站</p>
+            </div>
+        </div>
+        <div class="footer-bottom" style="max-width:var(--max-width);margin:40px auto 0;">
+            <span>© <span id="currentYear"></span> 虚拟档案展厅建设平台调研报告</span>
+            <span>Powered by 纯原生 HTML + CSS + JavaScript</span>
         </div>
     </footer>
 
-    <!-- ==================== 图片灯箱 ==================== -->
-    <div class="lightbox" id="lightbox" aria-hidden="true">
-        <button class="lightbox__close" aria-label="关闭">&times;</button>
-        <img class="lightbox__img" id="lightboxImg" src="" alt="">
-        <div class="lightbox__counter" id="lightboxCounter"></div>
+    <!-- ============================================================
+    返回顶部按钮
+    ============================================================ -->
+    <button class="back-to-top" id="backToTop" aria-label="返回顶部" title="返回顶部">↑</button>
+
+    <!-- ============================================================
+    图片灯箱
+    ============================================================ -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose" aria-label="关闭">✕</button>
+        <img src="" alt="" id="lightboxImg">
     </div>
 
-    <!-- ==================== 返回顶部按钮 ==================== -->
-    <button class="back-to-top" id="backToTop" title="返回顶部" aria-label="返回顶部">
-        ↑
-    </button>
+    <!-- ============================================================
+    JavaScript
+    ============================================================ -->
+    <script>
+    (function() {
+        'use strict';
 
-    <!-- ==================== JavaScript ==================== -->
-    <script src="js/main.js"></script>
+        // ============================================================
+        // DOM 引用缓存
+        // ============================================================
+        const pageLoader = document.getElementById('page-loader');
+        const scrollProgress = document.getElementById('scroll-progress');
+        const navbar = document.getElementById('navbar');
+        const navLinks = document.getElementById('navLinks');
+        const menuToggle = document.getElementById('menuToggle');
+        const themeToggle = document.getElementById('themeToggle');
+        const printBtn = document.getElementById('printBtn');
+        const backToTop = document.getElementById('backToTop');
+        const currentDateEl = document.getElementById('currentDate');
+        const currentYearEl = document.getElementById('currentYear');
+
+        // ============================================================
+        // 初始化：日期
+        // ============================================================
+        const today = new Date();
+        const dateStr = today.getFullYear() + '年' + (today.getMonth() + 1) + '月' + today.getDate() + '日';
+        if (currentDateEl) currentDateEl.textContent = dateStr;
+        if (currentYearEl) currentYearEl.textContent = today.getFullYear();
+
+        // ============================================================
+        // 页面加载动画
+        // ============================================================
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                pageLoader.classList.add('hidden');
+            }, 400);
+        });
+
+        // ============================================================
+        // 深色模式
+        // ============================================================
+        function getTheme() {
+            return localStorage.getItem('theme') || 'light';
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // 初始化主题
+        setTheme(getTheme());
+
+        themeToggle.addEventListener('click', function() {
+            const newTheme = getTheme() === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        });
+
+        // ============================================================
+        // 打印 PDF
+        // ============================================================
+        printBtn.addEventListener('click', function() {
+            window.print();
+        });
+
+        // ============================================================
+        // 移动端菜单
+        // ============================================================
+        menuToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('open');
+            menuToggle.classList.toggle('active');
+        });
+
+        // 点击导航链接时关闭移动菜单
+        navLinks.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('open');
+                menuToggle.classList.remove('active');
+            });
+        });
+
+        // ============================================================
+        // 导航栏滚动效果
+        // ============================================================
+        function updateNavScroll() {
+            if (window.scrollY > 10) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // ============================================================
+        // 滚动进度条
+        // ============================================================
+        function updateScrollProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            scrollProgress.style.width = Math.min(progress, 100) + '%';
+        }
+
+        // ============================================================
+        // 返回顶部按钮
+        // ============================================================
+        function updateBackToTop() {
+            if (window.scrollY > 600) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        }
+
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ============================================================
+        // 导航高亮当前章节
+        // ============================================================
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('section[id]');
+            const navAs = navLinks.querySelectorAll('a[data-section]');
+            let currentId = '';
+
+            sections.forEach(function(section) {
+                const rect = section.getBoundingClientRect();
+                // 当 section 顶部接近导航栏时激活
+                if (rect.top <= 150) {
+                    currentId = section.id;
+                }
+            });
+
+            navAs.forEach(function(a) {
+                a.classList.remove('active');
+                if (a.getAttribute('data-section') === currentId) {
+                    a.classList.add('active');
+                }
+            });
+        }
+
+        // ============================================================
+        // 滚动渐显动画 (Intersection Observer)
+        // ============================================================
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        revealElements.forEach(function(el) {
+            revealObserver.observe(el);
+        });
+
+        // ============================================================
+        // 数字统计动画
+        // ============================================================
+        const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+        const statObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseInt(el.getAttribute('data-target'), 10);
+                    animateNumber(el, target);
+                    statObserver.unobserve(el);
+                }
+            });
+        }, {
+            threshold: 0.5
+        });
+
+        statNumbers.forEach(function(el) {
+            statObserver.observe(el);
+        });
+
+        function animateNumber(el, target) {
+            const duration = 1200; // 动画时长 ms
+            const startTime = performance.now();
+            const startVal = 0;
+
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                // easeOutCubic 缓动
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(startVal + (target - startVal) * eased);
+                el.textContent = current;
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    el.textContent = target;
+                }
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        // ============================================================
+        // 合并滚动事件处理（性能优化：单次 rAF）
+        // ============================================================
+        let ticking = false;
+        function onScroll() {
+            if (!ticking) {
+                requestAnimationFrame(function() {
+                    updateNavScroll();
+                    updateScrollProgress();
+                    updateBackToTop();
+                    updateActiveNav();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        // 初始调用
+        updateNavScroll();
+        updateScrollProgress();
+        updateBackToTop();
+        updateActiveNav();
+
+        // ============================================================
+        // 图片灯箱
+        // ============================================================
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const screenshots = document.querySelectorAll('.platform-screenshot');
+
+        screenshots.forEach(function(shot) {
+            shot.addEventListener('click', function(e) {
+                const src = this.getAttribute('data-src');
+                lightboxImg.src = src;
+                lightboxImg.alt = this.querySelector('img').alt;
+                lightbox.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox || e.target === lightboxClose) {
+                closeLightbox();
+            }
+        });
+
+        lightboxClose.addEventListener('click', closeLightbox);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+                closeLightbox();
+            }
+        });
+
+        // ============================================================
+        // 键盘快捷键：按 ESC 关闭移动菜单
+        // ============================================================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+                navLinks.classList.remove('open');
+                menuToggle.classList.remove('active');
+            }
+        });
+
+        console.log('✅ 虚拟档案展厅建设平台调研报告 — 单页网站已就绪');
+        console.log('   🌙 深色模式切换  |  🖨️ 一键打印 PDF  |  📱 响应式适配');
+        console.log('   📊 ' + dateStr);
+    })();
+    </script>
+
 </body>
 </html>
