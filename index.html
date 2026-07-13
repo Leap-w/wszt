@@ -12,7 +12,6 @@
             --primary: #2563eb;
             --primary-light: #3b82f6;
             --primary-dark: #1d4ed8;
-            --primary-glow: rgba(37, 99, 235, 0.35);
             --bg: #f8fafc;
             --bg-alt: #f1f5f9;
             --surface: #ffffff;
@@ -23,9 +22,6 @@
             --border: #e2e8f0;
             --border-light: #f1f5f9;
             --gold: #f59e0b;
-            --gold-light: #fbbf24;
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
             --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
             --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04);
             --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.04);
@@ -50,8 +46,6 @@
             --text-muted: #64748b;
             --border: #334155;
             --border-light: #273548;
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-            --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
             --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
             --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
             --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.5);
@@ -204,28 +198,6 @@
             color: var(--primary);
         }
 
-        /* 打印按钮 */
-        .print-btn {
-            height: 40px;
-            padding: 0 16px;
-            border-radius: 20px;
-            border: 1.5px solid var(--border);
-            background: var(--surface);
-            cursor: pointer;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            transition: all var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-        .print-btn:hover {
-            background: var(--surface-hover);
-            border-color: var(--primary-light);
-            color: var(--primary);
-        }
-
         /* 移动端汉堡菜单 */
         .menu-toggle {
             display: none;
@@ -294,6 +266,18 @@
             max-width: 600px;
             line-height: 1.8;
         }
+        .section-alt {
+            background: var(--bg-alt);
+        }
+        .text-muted-sm {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .text-accent-sm {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
 
         /* ============================================================
            Hero 区域
@@ -351,17 +335,6 @@
             position: relative;
             z-index: 2;
             max-width: 800px;
-        }
-        .hero-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.85rem;
-            margin-bottom: 32px;
-            backdrop-filter: blur(10px);
         }
         .hero h1 {
             font-size: clamp(2.5rem, 5vw, 4rem);
@@ -461,9 +434,6 @@
             letter-spacing: -0.02em;
             line-height: 1;
         }
-        .stat-number.count-up {
-            transition: none;
-        }
         .stat-label {
             font-size: 0.9rem;
             color: var(--text-muted);
@@ -541,6 +511,10 @@
             box-shadow: var(--shadow-xl);
             transform: translateY(-3px);
         }
+        .platform-card.featured {
+            border-color: var(--primary-light);
+            border-width: 2px;
+        }
         .platform-header {
             padding: 32px 36px;
             border-bottom: 1px solid var(--border);
@@ -567,6 +541,13 @@
             font-weight: 900;
             color: var(--primary);
             flex-shrink: 0;
+        }
+        .platform-logo.accent {
+            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            color: #fff;
+        }
+        .platform-header.accent {
+            background: linear-gradient(135deg, rgba(37,99,235,0.03), rgba(6,182,212,0.03));
         }
         .platform-name {
             font-size: 1.4rem;
@@ -1071,50 +1052,6 @@
         }
 
         /* ============================================================
-           打印样式
-           ============================================================ */
-        @media print {
-            .nav, .back-to-top, #scroll-progress, #page-loader,
-            .theme-toggle, .print-btn, .menu-toggle, .hero-scroll,
-            .btn-experience, .nav-actions {
-                display: none !important;
-            }
-            .hero {
-                min-height: auto;
-                padding: 60px 32px;
-            }
-            .section {
-                padding: 40px 32px;
-            }
-            body {
-                font-size: 14px;
-                color: #000;
-            }
-            .platform-body {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .analysis-grid {
-                grid-template-columns: 1fr;
-            }
-            .recommend-card {
-                border: 2px solid #2563eb;
-                background: #f8fafc;
-            }
-            .recommend-card h2 {
-                color: #000;
-            }
-            .recommend-reasons li {
-                color: #333;
-            }
-            .platform-screenshots {
-                grid-template-columns: repeat(2, 1fr);
-                page-break-inside: avoid;
-            }
-            .platform-screenshot .zoom-icon,
-            .lightbox { display: none !important; }
-        }
-
-        /* ============================================================
            响应式 - 平板
            ============================================================ */
         @media (max-width: 1024px) {
@@ -1253,7 +1190,6 @@
             </ul>
             <div class="nav-actions">
                 <button class="theme-toggle" id="themeToggle" title="切换深色模式" aria-label="切换深色模式">🌙</button>
-                <button class="print-btn" id="printBtn" title="打印 PDF">🖨️ 打印</button>
                 <button class="menu-toggle" id="menuToggle" aria-label="菜单">
                     <span></span><span></span><span></span>
                 </button>
@@ -1268,7 +1204,6 @@
         <div class="hero-glow-1"></div>
         <div class="hero-glow-2"></div>
         <div class="hero-content">
-
             <h1><span>虚拟展厅</span>建设平台调研报告</h1>
             <p class="hero-subtitle">基于《廉花郑放·赓续清风——红色廉洁文化档案展》</p>
             <p class="hero-desc">为建设线上虚拟展厅，对目前主流虚拟展厅平台进行了实际体验，并从展厅效果、交互方式、制作流程、平台开放性等多个维度进行综合分析。</p>
@@ -1315,7 +1250,7 @@
     <!-- ============================================================
     评价指标
     ============================================================ -->
-    <section class="section" id="criteria" style="background: var(--bg-alt);">
+    <section class="section section-alt" id="criteria">
         <div class="container">
             <span class="section-label">评价指标</span>
             <h2 class="section-title reveal">六大核心评估维度</h2>
@@ -1374,7 +1309,7 @@
                             <div class="platform-logo">星</div>
                             <div>
                                 <div class="platform-name">星河 · 元宇宙引擎</div>
-                                <div style="font-size:0.85rem;color:var(--text-muted);">北师大图书馆教材展厅</div>
+                                <div class="text-muted-sm">北师大图书馆教材展厅</div>
                             </div>
                         </div>
                         <div class="platform-rating">
@@ -1443,7 +1378,7 @@
                             <div class="platform-logo">元</div>
                             <div>
                                 <div class="platform-name">元美名片</div>
-                                <div style="font-size:0.85rem;color:var(--text-muted);">微信小程序平台</div>
+                                <div class="text-muted-sm">微信小程序平台</div>
                             </div>
                         </div>
                         <div class="platform-rating">
@@ -1511,13 +1446,13 @@
                 </div>
 
                 <!-- 平台三：视创云展 -->
-                <div class="platform-card reveal" style="border-color: var(--primary-light); border-width: 2px;">
-                    <div class="platform-header" style="background: linear-gradient(135deg, rgba(37,99,235,0.03), rgba(6,182,212,0.03));">
+                <div class="platform-card reveal featured">
+                    <div class="platform-header accent">
                         <div class="platform-header-left">
-                            <div class="platform-logo" style="background:linear-gradient(135deg, #2563eb, #06b6d4); color:#fff;">视</div>
+                            <div class="platform-logo accent">视</div>
                             <div>
                                 <div class="platform-name">视创云展</div>
-                                <div style="font-size:0.85rem;color:var(--primary);font-weight:600;">🏆 最终推荐平台</div>
+                                <div class="text-accent-sm">🏆 最终推荐平台</div>
                             </div>
                         </div>
                         <div class="platform-rating">
@@ -1783,9 +1718,7 @@
         const navLinks = document.getElementById('navLinks');
         const menuToggle = document.getElementById('menuToggle');
         const themeToggle = document.getElementById('themeToggle');
-        const printBtn = document.getElementById('printBtn');
         const backToTop = document.getElementById('backToTop');
-        const currentDateEl = document.getElementById('currentDate');
         const currentYearEl = document.getElementById('currentYear');
 
         // ============================================================
@@ -1793,7 +1726,6 @@
         // ============================================================
         const today = new Date();
         const dateStr = today.getFullYear() + '年' + (today.getMonth() + 1) + '月' + today.getDate() + '日';
-        if (currentDateEl) currentDateEl.textContent = dateStr;
         if (currentYearEl) currentYearEl.textContent = today.getFullYear();
 
         // ============================================================
@@ -1824,13 +1756,6 @@
         themeToggle.addEventListener('click', function() {
             const newTheme = getTheme() === 'dark' ? 'light' : 'dark';
             setTheme(newTheme);
-        });
-
-        // ============================================================
-        // 打印 PDF
-        // ============================================================
-        printBtn.addEventListener('click', function() {
-            window.print();
         });
 
         // ============================================================
@@ -1951,17 +1876,14 @@
         });
 
         function animateNumber(el, target) {
-            const duration = 1200; // 动画时长 ms
+            const duration = 1200;
             const startTime = performance.now();
-            const startVal = 0;
 
             function step(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                // easeOutCubic 缓动
                 const eased = 1 - Math.pow(1 - progress, 3);
-                const current = Math.round(startVal + (target - startVal) * eased);
-                el.textContent = current;
+                el.textContent = Math.round(target * eased);
                 if (progress < 1) {
                     requestAnimationFrame(step);
                 } else {
@@ -2029,23 +1951,17 @@
         lightboxClose.addEventListener('click', closeLightbox);
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && lightbox.classList.contains('open')) {
-                closeLightbox();
-            }
-        });
-
-        // ============================================================
-        // 键盘快捷键：按 ESC 关闭移动菜单
-        // ============================================================
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && navLinks.classList.contains('open')) {
-                navLinks.classList.remove('open');
-                menuToggle.classList.remove('active');
+            if (e.key === 'Escape') {
+                if (lightbox.classList.contains('open')) closeLightbox();
+                if (navLinks.classList.contains('open')) {
+                    navLinks.classList.remove('open');
+                    menuToggle.classList.remove('active');
+                }
             }
         });
 
         console.log('✅ 虚拟档案展厅建设平台调研报告 — 单页网站已就绪');
-        console.log('   🌙 深色模式切换  |  🖨️ 一键打印 PDF  |  📱 响应式适配');
+        console.log('   🌙 深色模式切换  |  📱 响应式适配');
         console.log('   📊 ' + dateStr);
     })();
     </script>
